@@ -55,54 +55,56 @@
                                         <div class="checkout-detail">
 
                                             <div class="row g-4">
-                                                @foreach ( $address as  $addres)
+                                                @foreach ($address as $addres)
+                                                    <div class="col-xxl-6 col-lg-12 col-md-6">
 
-                                                <div class="col-xxl-6 col-lg-12 col-md-6">
-
-                                                    <div class="delivery-address-box">
-
+                                                        <div class="delivery-address-box">
 
 
-                                                        <div>
 
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    name="jack" id="flexRadioDefault2" checked="checked">
+                                                            <div>
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="address_type"{{$loop->index==0 ? 'checked="checked"' : ''}}
+                                                                       >
+                                                                </div>
+
+                                                                <div class="label">
+                                                                    <label>{{ $addres->Label }}</label>
+                                                                </div>
+
+                                                                <ul class="delivery-address-detail">
+                                                                    <li>
+                                                                        <h4 class="fw-500">{{ $addres->CustomerName }}</h4>
+                                                                    </li>
+
+                                                                    <li>
+                                                                        <p class="text-content"><span
+                                                                                class="text-title">Address
+                                                                                :</span>{{ $addres->CustomerAddress }}
+                                                                        </p>
+                                                                    </li>
+
+                                                                    <li>
+                                                                        <h6 class="text-content"><span
+                                                                                class="text-title">Zip
+                                                                                Code :</span>
+                                                                            {{ $addres->ZipCode }}</h6>
+                                                                    </li>
+
+                                                                    <li>
+                                                                        <h6 class="text-content mb-0"><span
+                                                                                class="text-title">Phone
+                                                                                :</span> {{ $addres->PhoneNumber }}</h6>
+                                                                    </li>
+                                                                </ul>
+
                                                             </div>
-
-                                                            <div class="label">
-                                                                <label>{{$addres->Label}}</label>
-                                                            </div>
-
-                                                            <ul class="delivery-address-detail">
-                                                                <li>
-                                                                    <h4 class="fw-500">{{$addres->CustomerName}}</h4>
-                                                                </li>
-
-                                                                <li>
-                                                                    <p class="text-content"><span class="text-title">Address
-                                                                            :</span>{{$addres->CustomerAddress}}
-                                                                    </p>
-                                                                </li>
-
-                                                                <li>
-                                                                    <h6 class="text-content"><span class="text-title">Zip
-                                                                            Code :</span>
-                                                                        {{$addres->ZipCode}}</h6>
-                                                                </li>
-
-                                                                <li>
-                                                                    <h6 class="text-content mb-0"><span
-                                                                            class="text-title">Phone
-                                                                            :</span> {{$addres->PhoneNumber}}</h6>
-                                                                </li>
-                                                            </ul>
 
                                                         </div>
 
                                                     </div>
-
-                                                </div>
                                                 @endforeach
                                             </div>
 
@@ -138,9 +140,8 @@
                                                             <div class="shipment-detail">
                                                                 <div class="form-check custom-form-check hide-check-box">
                                                                     <input class="form-check-input" type="radio"
-                                                                        name="standard" id="standard" checked>
-                                                                    <label class="form-check-label" for="standard">Standard
-                                                                        Delivery Option</label>
+                                                                        name="in_dhaka" checked>
+                                                                    <label class="form-check-label" for="standard">Inside Dhaka</label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -154,47 +155,15 @@
                                                                 <div
                                                                     class="form-check mb-0 custom-form-check show-box-checked">
                                                                     <input class="form-check-input" type="radio"
-                                                                        name="standard" id="future">
-                                                                    <label class="form-check-label" for="future">Future
-                                                                        Delivery Option</label>
+                                                                        name="out_dhaka">
+                                                                    <label class="form-check-label" for="future">Out side Dhaka</label>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-12 future-box">
-                                                    <div class="future-option">
-                                                        <div class="row g-md-0 gy-4">
-                                                            <div class="col-md-6">
-                                                                <div class="delivery-items">
-                                                                    <div>
-                                                                        <h5 class="items text-content"><span>3
-                                                                                Items</span>@
-                                                                            $693.48</h5>
-                                                                        <h5 class="charge text-content">Delivery Charge
-                                                                            $34.67
-                                                                            <button type="button" class="btn p-0"
-                                                                                data-bs-toggle="tooltip"
-                                                                                data-bs-placement="top"
-                                                                                title="Extra Charge">
-                                                                                <i
-                                                                                    class="fa-solid fa-circle-exclamation"></i>
-                                                                            </button>
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
 
-                                                            <div class="col-md-6">
-                                                                <form class="form-floating theme-form-floating date-box">
-                                                                    <input type="date" class="form-control">
-                                                                    <label>Select Date</label>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -217,12 +186,11 @@
                                                 id="accordionFlushExample">
                                                 <div class="accordion-item">
                                                     <div class="accordion-header" id="flush-headingFour">
-                                                        <div class="accordion-button collapsed" data-bs-toggle="collapse"
-                                                            data-bs-target="#flush-collapseFour">
+                                                        <div class="accordion-button collapsed">
                                                             <div class="custom-form-check form-check mb-0">
                                                                 <label class="form-check-label" for="cash"><input
                                                                         class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="cash" checked>
+                                                                        name="cash_on"  checked>
                                                                     Cash
                                                                     On Delivery</label>
                                                             </div>
@@ -246,261 +214,15 @@
                                                             <div class="custom-form-check form-check mb-0">
                                                                 <label class="form-check-label" for="credit"><input
                                                                         class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="credit">
-                                                                    Credit or Debit Card</label>
+                                                                        name="online_payment" >
+                                                                    Online Payemnt</label>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    {{-- <div id="flush-collapseOne" class="accordion-collapse collapse"
-                                                        data-bs-parent="#accordionFlushExample">
-                                                        <div class="accordion-body">
-                                                            <div class="row g-2">
-                                                                <div class="col-12">
-                                                                    <div class="payment-method">
-                                                                        <div
-                                                                            class="form-floating mb-lg-3 mb-2 theme-form-floating">
-                                                                            <input type="text" class="form-control"
-                                                                                id="credit2"
-                                                                                placeholder="Enter Credit & Debit Card Number">
-                                                                            <label for="credit2">Enter Credit & Debit
-                                                                                Card Number</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
 
-                                                                <div class="col-xxl-4">
-                                                                    <div
-                                                                        class="form-floating mb-lg-3 mb-2 theme-form-floating">
-                                                                        <input type="text" class="form-control"
-                                                                            id="expiry"
-                                                                            placeholder="Enter Expiry Date">
-                                                                        <label for="expiry">Expiry Date</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-xxl-4">
-                                                                    <div
-                                                                        class="form-floating mb-lg-3 mb-2 theme-form-floating">
-                                                                        <input type="text" class="form-control"
-                                                                            id="cvv" placeholder="Enter CVV Number">
-                                                                        <label for="cvv">CVV Number</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-xxl-4">
-                                                                    <div
-                                                                        class="form-floating mb-lg-3 mb-2 theme-form-floating">
-                                                                        <input type="password" class="form-control"
-                                                                            id="password" placeholder="Enter Password">
-                                                                        <label for="password">Password</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="button-group mt-0">
-                                                                    <ul>
-                                                                        <li>
-                                                                            <button
-                                                                                class="btn btn-light shopping-button">Cancel</button>
-                                                                        </li>
-
-                                                                        <li>
-                                                                            <button class="btn btn-animation">Use This
-                                                                                Card</button>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div> --}}
                                                 </div>
 
-                                                {{-- <div class="accordion-item">
-                                                    <div class="accordion-header" id="flush-headingTwo">
-                                                        <div class="accordion-button collapsed" data-bs-toggle="collapse"
-                                                            data-bs-target="#flush-collapseTwo">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="banking"><input
-                                                                        class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="banking">Net
-                                                                    Banking</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="flush-collapseTwo" class="accordion-collapse collapse"
-                                                        data-bs-parent="#accordionFlushExample">
-                                                        <div class="accordion-body">
-                                                            <h5 class="text-uppercase mb-4">Select Your Bank
-                                                            </h5>
-                                                            <div class="row g-2">
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="bank1">
-                                                                        <label class="form-check-label"
-                                                                            for="bank1">Industrial & Commercial
-                                                                            Bank</label>
-                                                                    </div>
-                                                                </div>
 
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="bank2">
-                                                                        <label class="form-check-label"
-                                                                            for="bank2">Agricultural Bank</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="bank3">
-                                                                        <label class="form-check-label"
-                                                                            for="bank3">Bank
-                                                                            of America</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="bank4">
-                                                                        <label class="form-check-label"
-                                                                            for="bank4">Construction Bank Corp.</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="bank5">
-                                                                        <label class="form-check-label"
-                                                                            for="bank5">HSBC
-                                                                            Holdings</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="bank6">
-                                                                        <label class="form-check-label"
-                                                                            for="bank6">JPMorgan Chase & Co.</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-12">
-                                                                    <div class="select-option">
-                                                                        <div class="form-floating theme-form-floating">
-                                                                            <select class="form-select theme-form-select"
-                                                                                aria-label="Default select example">
-                                                                                <option value="hsbc">HSBC Holdings
-                                                                                </option>
-                                                                                <option value="loyds">Lloyds Banking
-                                                                                    Group</option>
-                                                                                <option value="natwest">Nat West Group
-                                                                                </option>
-                                                                                <option value="Barclays">Barclays
-                                                                                </option>
-                                                                                <option value="other">Others Bank
-                                                                                </option>
-                                                                            </select>
-                                                                            <label>Select Other Bank</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
-
-                                                {{-- <div class="accordion-item">
-                                                    <div class="accordion-header" id="flush-headingThree">
-                                                        <div class="accordion-button collapsed" data-bs-toggle="collapse"
-                                                            data-bs-target="#flush-collapseThree">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="wallet"><input
-                                                                        class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="wallet">My
-                                                                    Wallet</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="flush-collapseThree" class="accordion-collapse collapse"
-                                                        data-bs-parent="#accordionFlushExample">
-                                                        <div class="accordion-body">
-                                                            <h5 class="text-uppercase mb-4">Select Your Wallet
-                                                            </h5>
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <label class="form-check-label"
-                                                                            for="amazon"><input
-                                                                                class="form-check-input mt-0"
-                                                                                type="radio" name="flexRadioDefault"
-                                                                                id="amazon">Amazon Pay</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="gpay">
-                                                                        <label class="form-check-label"
-                                                                            for="gpay">Google Pay</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="airtel">
-                                                                        <label class="form-check-label"
-                                                                            for="airtel">Airtel Money</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="paytm">
-                                                                        <label class="form-check-label"
-                                                                            for="paytm">Paytm Pay</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="jio">
-                                                                        <label class="form-check-label" for="jio">JIO
-                                                                            Money</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="free">
-                                                                        <label class="form-check-label"
-                                                                            for="free">Freecharge</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -519,49 +241,44 @@
                             </div>
 
                             <ul class="summery-contain">
-@foreach (cards() as $carts)
-
-
-                                <li>
-                                    <img src="{{asset('image/products/'. $carts->product->p_image)}}"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>{{$carts->product->product_name}} <span>X {{$carts->quantity}}</span></h4>
-                                    <h4 class="price">{{$carts->quantity*$carts->product->discount_price}}</h4>
-                                </li>
-
-
+                                @foreach (cards() as $carts)
+                                    <li>
+                                        <img src="{{ asset('image/products/' . $carts->product->p_image) }}"
+                                            class="img-fluid blur-up lazyloaded checkout-image" alt="">
+                                        <h4>{{ $carts->product->product_name }} <span>X {{ $carts->quantity }}</span></h4>
+                                        <h4 class="price">{{ $carts->quantity * $carts->product->discount_price }}</h4>
+                                    </li>
                                 @endforeach
                             </ul>
 
                             <ul class="summery-total">
                                 <li>
-                                    <h4>Subtotal</h4>
-                                    <h4 class="price">$111.81</h4>
+                                    <h4>Save</h4>
+                                    <h4 class="price">
+                                        {{($carts->quantity*$carts->product->regular_price)-($carts->quantity * $carts->product->discount_price) }}
+                                    </h4>
                                 </li>
 
                                 <li>
-                                    <h4>Shipping</h4>
-                                    <h4 class="price">$8.90</h4>
+                                    <h4>Disscuont</h4>
+                                    <h4 class="price">{{$carts->product->discount}}%</h4>
                                 </li>
 
-                                <li>
-                                    <h4>Tax</h4>
-                                    <h4 class="price">$29.498</h4>
-                                </li>
+
 
                                 <li>
                                     <h4>Coupon/Code</h4>
-                                    <h4 class="price">$-23.10</h4>
+                                    <h4 class="price">mamun</h4>
                                 </li>
 
                                 <li class="list-total">
-                                    <h4>Total (USD)</h4>
-                                    <h4 class="price">$19.28</h4>
+                                    <h4>Total (BD)</h4>
+                                    <h4 class="price">{{total_price()}}</h4>
                                 </li>
                             </ul>
                         </div>
 
-                        <div class="checkout-offer">
+                        {{-- <div class="checkout-offer">
                             <div class="offer-title">
                                 <div class="offer-icon">
                                     <img src="../assets/images/inner-page/offer.svg" class="img-fluid" alt="">
@@ -579,7 +296,7 @@
                                     <p>combo: Royal Cashew Californian, Extra Bold 100 gm + BB Royal Honey 500 gm</p>
                                 </li>
                             </ul>
-                        </div>
+                        </div> --}}
 
                         <button class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Place Order</button>
                     </div>
