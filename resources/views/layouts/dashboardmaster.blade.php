@@ -58,6 +58,8 @@
     <!-- Include Quill stylesheets -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/dropzone.css">
+{{-- font  osweme --}}
+    <script src="https://kit.fontawesome.com/d7ebd3584d.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -348,11 +350,11 @@
                                     </a>
                                     <ul class="sidebar-submenu">
                                         <li>
-                                            <a href="coupon-list.html">Coupon List</a>
+                                            <a href="{{route('coupons.index')}}">Coupon List</a>
                                         </li>
 
                                         <li>
-                                            <a href="create-coupon.html">Create Coupon</a>
+                                            <a href="{{route('coupons.create')}}">Create Coupon</a>
                                         </li>
                                     </ul>
                                 </li>

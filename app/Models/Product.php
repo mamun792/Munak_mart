@@ -34,4 +34,16 @@ class Product extends Model
         return $this->hasMany(Featured_photo::class, 'product_id', 'id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    public function inventory()
+    {
+        return $this->hasMany(Inventory::class, 'product_id', 'id');
+    }
+    public function product(){
+        return $this->hasOne(Inventory::class);
+    }
 }

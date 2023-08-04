@@ -8,6 +8,7 @@
     <meta name="description" content="Fastkart">
     <meta name="keywords" content="Fastkart">
     <meta name="author" content="Fastkart">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="../assets/images/favicon/1.png" type="image/x-icon">
     <title>On-demand last-mile delivery</title>
 
@@ -166,69 +167,69 @@
                                         </a>
                                     </li>
                                     <li class="right-side">
-                                        <a href="wishlist.html" class="btn p-0 position-relative header-wishlist">
+                                        <a href="{{ route('wishlist') }}"
+                                            class="btn p-0 position-relative header-wishlist">
                                             <i data-feather="heart"></i>
+                                            @if (auth()->check() && withlist_count() > 0)
+                                                <span class="position-absolute top-0 start-100 translate-middle badge">
+                                                    {{ withlist_count() }}
+                                                </span>
+                                            @endif
+
                                         </a>
                                     </li>
                                     <li class="right-side">
                                         <div class="onhover-dropdown header-badge">
                                             <button type="button" class="btn p-0 position-relative header-wishlist">
                                                 <i data-feather="shopping-cart"></i>
-                                                <span
-                                                    class="position-absolute top-0 start-100 translate-middle badge">2
-                                                    <span class="visually-hidden">unread messages</span>
-                                                </span>
+                                                @if (auth()->check() && add_to_card_count() > 0)
+                                                    <span
+                                                        class="position-absolute top-0 start-100 translate-middle badge">
+                                                        {{ add_to_card_count() }}
+                                                        <span class="visually-hidden">unread messages</span>
+                                                    </span>
+                                                @endif
+
                                             </button>
 
                                             <div class="onhover-div">
                                                 <ul class="cart-list">
-                                                    <li class="product-box-contain">
-                                                        <div class="drop-cart">
-                                                            <a href="product-left-thumbnail.html" class="drop-image">
-                                                                <img src="{{ asset('fonend_asset/images/vegetable/product/1.png') }}"
-                                                                    class="blur-up lazyload" alt="">
-                                                            </a>
+                                                    @if (auth()->check() && cards()->count() >0)
 
-                                                            <div class="drop-contain">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <h5>Fantasy Crunchy Choco Chip Cookies</h5>
-                                                                </a>
-                                                                <h6><span>1 x</span> $80.58</h6>
-                                                                <button class="close-button close_button">
-                                                                    <i class="fa-solid fa-xmark"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </li>
+                                                        @foreach (cards() as $card)
+                                                            <li class="product-box-contain">
+                                                                <div class="drop-cart">
+                                                                    <a href="product-left-thumbnail.html"
+                                                                        class="drop-image">
+                                                                        <img src="{{ asset('image/products/' . $card->product->p_image) }}"
+                                                                            class="blur-up lazyload" alt="not ">
+                                                                    </a>
 
-                                                    <li class="product-box-contain">
-                                                        <div class="drop-cart">
-                                                            <a href="product-left-thumbnail.html" class="drop-image">
-                                                                <img src="{{ asset('fonend_asset/images/vegetable/product/2.png') }}"
-                                                                    class="blur-up lazyload" alt="">
-                                                            </a>
+                                                                    <div class="drop-contain">
+                                                                        <a href="product-left-thumbnail.html">
+                                                                            <h5>{{ $card->product->product_name }}</h5>
+                                                                        </a>
+                                                                        <h6><span></span>
+                                                                            {{ $card->product->discount_price }}</h6>
+                                                                        <button class="close-button close_button">
+                                                                            <i class="fa-solid fa-xmark"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
+                                                    @endif
 
-                                                            <div class="drop-contain">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <h5>Peanut Butter Bite Premium Butter Cookies 600 g
-                                                                    </h5>
-                                                                </a>
-                                                                <h6><span>1 x</span> $25.68</h6>
-                                                                <button class="close-button close_button">
-                                                                    <i class="fa-solid fa-xmark"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </li>
                                                 </ul>
 
                                                 <div class="price-box">
                                                     <h5>Total :</h5>
-                                                    <h4 class="theme-color fw-bold">$106.58</h4>
+                                                    <h4 class="theme-color fw-bold">500</h4>
                                                 </div>
 
                                                 <div class="button-group">
-                                                    <a href="cart.html" class="btn btn-sm cart-button">View Cart</a>
+                                                    <a href="{{ route('view.card') }}"
+                                                        class="btn btn-sm cart-button">View Cart</a>
                                                     <a href="checkout.html"
                                                         class="btn btn-sm cart-button theme-bg-color
                                                     text-white">Checkout</a>
@@ -293,10 +294,10 @@
                                 <ul class="category-list">
                                     @foreach (list_of_category() as $category)
                                         <li class="onhover-category-list">
-                                            <a href="#" class="category-name">
-                                                <img src="{{ asset('image/category/'.$category->photo) }}"
+                                            <a href="{{route('shop',$category->id)}}" class="category-name">
+                                                <img src="{{ asset('image/category/' . $category->photo) }}"
                                                     alt="not">
-                                                <h6>{{$category->name}}</h6>
+                                                <h6>{{ $category->name }}</h6>
 
                                             </a>
                                         </li>
@@ -318,18 +319,18 @@
                                     <div class="offcanvas-body">
                                         <ul class="navbar-nav">
                                             <li class="nav-item ">
-                                                <a class="nav-link" href="{{route('/')}}">Home</a>
+                                                <a class="nav-link" href="{{ route('/') }}">Home</a>
                                             </li>
 
                                             <li class="nav-item dropdown">
-                                                <a class="nav-link" href="shop-top-filter.html">Shop</a>
+                                                <a class="nav-link" href="{{route('shop','all')}}">Shop</a>
                                             </li>
 
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link" href="product-left-thumbnail.html">Product</a>
                                             </li>
                                             <li class="nav-item dropdown">
-                                                <a class="nav-link" href="{{route('about')}}">About</a>
+                                                <a class="nav-link" href="{{ route('about') }}">About</a>
                                             </li>
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link" href="product-left-thumbnail.html">Contract</a>
@@ -844,6 +845,8 @@
 
     <!-- thme setting js -->
     <script src="{{ asset('fonend_asset/js/theme-setting.js') }}"></script>
+
+    @yield('fotter_scprit')
 </body>
 
 </html>

@@ -32,35 +32,52 @@
                                             @error('name')
                                                 <span class=" text-danger">{{ $message }}</span>
                                             @enderror
+
+
                                         </div>
 
-
-                                        <div class="text-center">
-                                            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                                        <div class="mb-4 row align-items-center">
+                                            <div class="col-sm-9">
+                                                <button type="submit" name="submit"
+                                                    class="btn btn-primary ">Submit</button>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
-                                <div class="mt-3">
-                                    <ul>
-                                        @foreach ($attributes as $attribute)
-                                            <li>
-                                                @if (isset($attribute['name']))
-                                                    {{ $attribute['name'] }}
-                                                @else
-                                                    No name available
-                                                @endif
-                                            </li>
-                                        @endforeach
-                                    </ul>
+
+
+
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table mt-3">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Size Name</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($attributes as $attribute)
+                                                <tr>
+                                                    <th scope="row">{{ $loop->index + 1 }}</th>
+                                                    <td> {{ $attribute['name'] }}</td>
+
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-sm-6 m-auto">
+                        <div class="col-sm-6 ">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="card-header-2">
-                                        <h5>Category Information</h5>
+                                        <h5>Color Code Information</h5>
                                     </div>
                                     @if (session('success'))
                                         <div class="alert alert-success">
@@ -68,53 +85,65 @@
                                         </div>
                                     @endif
 
-                                    <form class="theme-form theme-form-2 mega-form" method="POST" action="#"
-                                        enctype="multipart/form-data">
+                                    <form class="theme-form theme-form-2 mega-form" method="POST"
+                                        action="{{ route('create.color') }}">
                                         @csrf
                                         <div class="mb-4 row align-items-center">
-                                            <label class="form-label-title col-sm-3 mb-0">Category Name</label>
+                                            <label class="form-label-title col-sm-3 mb-0">Attribute Color</label>
                                             <div class="col-sm-9">
-                                                <input class="form-control" type="text" name="c_name">
+                                                <input class="form-control" type="text" name="name">
                                             </div>
-                                            @error('c_name')
+                                            @error('name')
                                                 <span class=" text-danger">{{ $message }}</span>
                                             @enderror
+
+
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="col-sm-3 col-form-label form-label-title">Category Image</label>
-                                            <div class="form-group col-sm-9">
-                                                <div class="dropzone-wrapper">
-                                                    <div class="dropzone-desc">
-                                                        <i class="ri-upload-2-line"></i>
-                                                        <p>Choose an image file or drag it here.</p>
-                                                    </div>
-                                                    <input type="file" class="dropzone" name="photo">
-                                                </div>
-                                                <span class="text-danger"></span>
+                                            <label class="form-label-title col-sm-3 mb-0">Attribute Color Code</label>
+                                            <div class="col-sm-9">
+                                                <input type="color" name="color_code">
                                             </div>
+                                            @error('color_code')
+                                                <span class=" text-danger">{{ $message }}</span>
+                                            @enderror
+
+
                                         </div>
-
-
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="col-sm-3 col-form-label form-label-title">Category
-                                                Description</label>
-                                            <div class="form-group col-sm-9">
-                                                <textarea class="form-control" name="description"></textarea>
-                                                @error('description')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                            <div class="col-sm-9">
+                                                <button type="submit" class="btn btn-primary ">Submit</button>
                                             </div>
-                                        </div>
-
-
-
-
-                                        <div class="text-center">
-                                            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table mt-3">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Color Name</th>
+                                                <th scope="col">Color Code</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($colors as $color)
+                                                <tr>
+                                                    <th scope="row">{{ $loop->index + 1 }}</th>
+                                                    <td> {{ $color->name }}</td>
+                                                    <td>
+
+                                                        <div style="width: 30px; height: 30px; background-color: {{ $color->color_code }};"></div>
+                                                    </td>
+
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

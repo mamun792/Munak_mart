@@ -41,7 +41,7 @@
                                                 <th>Category</th>
                                                 <th>Current Qty</th>
                                                 <th>Price</th>
-                                                <th>Status</th>
+                                                <th>Action</th>
                                                 <th>Option</th>
                                             </tr>
                                         </thead>
@@ -51,21 +51,23 @@
                                                 <tr>
                                                     <td>
                                                         <div class="table-image">
-                                                            <img src="{{asset('image/products/'. $productss->p_image)}}" class="img-fluid"
-                                                                alt="{{$productss->product_name}}">
+                                                            <img src="{{ asset('image/products/' . $productss->p_image) }}"
+                                                                class="img-fluid" alt="{{ $productss->product_name }}">
                                                         </div>
                                                     </td>
 
-                                                    <td>{{$productss->product_name}}</td>
+                                                    <td>{{ $productss->product_name }}</td>
 
-                                                    <td>{{$productss->category->name}}</td>
+                                                    <td>{{ $productss->category->name }}</td>
 
                                                     <td>12</td>
 
-                                                    <td class="td-price">{{$productss->pursing_price}}</td>
+                                                    <td class="td-price">{{ $productss->pursing_price }}</td>
 
                                                     <td class="status-danger">
-                                                        <span>Pending</span>
+                                                        <a href="{{route('inventory_add',$productss->id)}}" class="btn btn-sm">
+                                                            <i class="fa-solid fa-plus"></i> Add Inventory
+                                                        </a>
                                                     </td>
 
                                                     <td>

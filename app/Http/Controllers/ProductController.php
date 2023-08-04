@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attributes;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Featured_photo;
+use App\Models\Inventory;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -19,6 +22,7 @@ class ProductController extends Controller
     public function product_show()
     {
         $categories = Category::latest()->get();
+
         return view('backend.product.product_show', compact('categories'));
     }
 
@@ -96,5 +100,54 @@ class ProductController extends Controller
 
 
         return back()->with('error', 'An error occurred while adding the product. Please try again later.');
+    }
+
+    public function inventory_add($id)
+    {
+        $product = Product::find($id);
+        $sizes = Attributes::all();
+        $colors = Color::all();
+        $inventory = Inventory::where('product_id', $id)->with('color', 'size')->get();
+
+        return view('backend.product.inventary_add', compact('product', 'sizes', 'colors', 'inventory'));
+    }
+
+    public function insert_inventory(Request $request, $id)
+    {
+
+        $request->validate([
+            'size_name' => 'required|string|max:255',
+            'color_name' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $check_old = Inventory::where([
+            'product_id' => $request->id,
+            'size_name' => $request->size_name,
+            'color_name' => $request->color_name,
+        ])->exists();
+
+        if ($check_old) {
+
+            Inventory::where([
+                'product_id' => $request->id,
+                'size_name' => $request->size_name,
+                'color_name' => $request->color_name,
+            ])->increment('quantity', $request->quantity);
+        } else {
+            //
+            Inventory::insert([
+                'product_id' => $request->id,
+                'size_name' => $request->size_name,
+                'color_name' => $request->color_name,
+                'quantity' => $request->quantity,
+                'created_at' => Carbon::now(),
+            ]);
+        }
+
+
+
+
+        return back()->with('success', 'Inventory added successfully.');
     }
 }
