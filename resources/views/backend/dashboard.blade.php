@@ -11,7 +11,7 @@
                             <div class="media align-items-center static-top-widget">
                                 <div class="media-body p-0">
                                     <span class="m-0">Total Revenue</span>
-                                    <h4 class="mb-0 counter">$6659
+                                    <h4 class="mb-0 counter">{{$total_revenue}}tk
                                         <span class="badge badge-light-primary grow">
                                             <i data-feather="trending-up"></i>8.5%</span>
                                     </h4>
@@ -30,7 +30,7 @@
                             <div class="media static-top-widget">
                                 <div class="media-body p-0">
                                     <span class="m-0">Total Orders</span>
-                                    <h4 class="mb-0 counter">9856
+                                    <h4 class="mb-0 counter">{{ $total_oder}}
                                         <span class="badge badge-light-danger grow">
                                             <i data-feather="trending-down"></i>8.5%</span>
                                     </h4>
@@ -49,7 +49,7 @@
                             <div class="media static-top-widget">
                                 <div class="media-body p-0">
                                     <span class="m-0">Total Products</span>
-                                    <h4 class="mb-0 counter">893
+                                    <h4 class="mb-0 counter">{{$total_product}}
                                         <a href="add-new-product.html" class="badge badge-light-secondary grow">
                                             ADD NEW</a>
                                     </h4>
@@ -69,7 +69,7 @@
                             <div class="media static-top-widget">
                                 <div class="media-body p-0">
                                     <span class="m-0">Total Customers</span>
-                                    <h4 class="mb-0 counter">4.6k
+                                    <h4 class="mb-0 counter">{{$total_customer}}
                                         <span class="badge badge-light-success grow">
                                             <i data-feather="trending-down"></i>8.5%</span>
                                     </h4>
@@ -96,8 +96,8 @@
                                     <div>
                                         <div class="dashboard-category">
                                             <a href="javascript:void(0)" class="category-image">
-                                                <img src="{{ asset('image/category/' . $catory->photo) }}"
-                                                    class="img-fluid" alt="{{ $catory->name }}">
+                                                <img src="{{ asset('image/category/' . $catory->photo) }}" class="img-fluid"
+                                                    alt="{{ $catory->name }}">
                                             </a>
                                             <a href="javascript:void(0)" class="category-name">
                                                 <h6>{{ $catory->name }}</h6>
@@ -326,164 +326,54 @@
                                 <div class="table-responsive">
                                     <table class="best-selling-table table border-0">
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="best-product-box">
-                                                        <div class="product-name">
-                                                            <h5>Aata Buscuit</h5>
-                                                            <h6>#64548</h6>
+                                            @foreach ($invoice_deatiles as $invoice_deatiles)
+                                                <tr>
+                                                    <td>
+                                                        <div class="best-product-box">
+                                                            <div class="product-name">
+                                                                <h5>{{ $invoice_deatiles->product_name }}</h5>
+                                                                <h6>{{ $invoice_deatiles->invoice_no }}</h6>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </td>
+                                                    </td>
 
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Date Placed</h6>
-                                                        <h5>5/1/22</h5>
-                                                    </div>
-                                                </td>
+                                                    <td>
+                                                        <div class="product-detail-box">
+                                                            <h6>Date Placed</h6>
+                                                            <h5>
+                                                                {{ $invoice_deatiles->created_at->format('d-m-Y') }}
 
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Price</h6>
-                                                        <h5>$250.00</h5>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Order Status</h6>
-                                                        <h5>Completed</h5>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Payment</h6>
-                                                        <h5 class="text-danger">Unpaid</h5>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                    <div class="best-product-box">
-                                                        <div class="product-name">
-                                                            <h5>Aata Buscuit</h5>
-                                                            <h6>26-08-2022</h6>
+                                                            </h5>
                                                         </div>
-                                                    </div>
-                                                </td>
+                                                    </td>
 
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Date Placed</h6>
-                                                        <h5>5/1/22</h5>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Price</h6>
-                                                        <h5>$250.00</h5>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Order Status</h6>
-                                                        <h5>Completed</h5>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Payment</h6>
-                                                        <h5 class="theme-color">Paid</h5>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                    <div class="best-product-box">
-                                                        <div class="product-name">
-                                                            <h5>Aata Buscuit</h5>
-                                                            <h6>26-08-2022</h6>
+                                                    <td>
+                                                        <div class="product-detail-box">
+                                                            <h6>Price</h6>
+                                                            <h5>
+                                                                {{ $invoice_deatiles->total_amount }}
+                                                            </h5>
                                                         </div>
-                                                    </div>
-                                                </td>
+                                                    </td>
 
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Date Placed</h6>
-                                                        <h5>5/1/22</h5>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Price</h6>
-                                                        <h5>$250.00</h5>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Order Status</h6>
-                                                        <h5>Completed</h5>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Payment</h6>
-                                                        <h5 class="theme-color">Paid</h5>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                    <div class="best-product-box">
-                                                        <div class="product-name">
-                                                            <h5>Aata Buscuit</h5>
-                                                            <h6>26-08-2022</h6>
+                                                    <td>
+                                                        <div class="product-detail-box">
+                                                            <h6>Order Status</h6>
+                                                            <h5>
+                                                                {{ $invoice_deatiles->payment_option }}
+                                                            </h5>
                                                         </div>
-                                                    </div>
-                                                </td>
+                                                    </td>
 
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Date Placed</h6>
-                                                        <h5>5/1/22</h5>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Price</h6>
-                                                        <h5>$250.00</h5>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Order Status</h6>
-                                                        <h5>Completed</h5>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="product-detail-box">
-                                                        <h6>Payment</h6>
-                                                        <h5 class="theme-color">Paid</h5>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                                    <td>
+                                                        <div class="product-detail-box">
+                                                            <h6>Payment</h6>
+                                                            <h5 class="text-danger">
+                                                                {{ $invoice_deatiles->payment_status }}</h5>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -694,9 +584,7 @@
         </div>
         <!-- Container-fluid Ends-->
 
-@include('parts.copy_right');
+        @include('parts.copy_right');
     </div>
     <!-- index body end -->
-
-
 @endsection

@@ -12,11 +12,15 @@ use App\Models\Product;
 use App\Models\User;
 use App\Models\Coupon;
 use App\Models\CustomerAddress;
+use App\Models\Invoice;
+use App\Models\invoice_Deatiles;
 use App\Models\Wishlist;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Str;
+use PDF;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
@@ -36,17 +40,31 @@ class FontendController extends Controller
     {
 
 
+
+
         try {
+
+
+
+
+
             $featured_photos  = Featured_photo::where('product_id', $id)->get();
             $poducts = Product::find($id);
             $category_id = $poducts->category_id;
             $related_products = Product::where('category_id', $category_id)->where('id', '!=', $id)->get();
             $vendors = User::find($poducts->vendor_id);
 
-
             $product_size = Inventory::where('product_id', $id)->with('size')->get();
 
-            return view('product_dealties', compact('poducts', 'featured_photos', 'vendors', 'related_products', 'product_size'));
+            $whishlist_check = Wishlist::where('user_id', auth()->user()->id)->where('product_id', $id)->exists();
+            if ($whishlist_check) {
+
+                $whishlist_checks = 1;
+            } else {
+                $whishlist_checks = 0;
+            }
+
+            return view('product_dealties', compact('poducts', 'featured_photos', 'vendors', 'related_products', 'product_size', 'whishlist_checks'));
         } catch (\Throwable $th) {
             return view('product_dealties')->with('error', 'Product not found!');
         }
@@ -72,7 +90,7 @@ class FontendController extends Controller
 
     public function wishlist_show()
     {
-        $favorit = Wishlist::with('wishlists')->get();
+        $favorit = Wishlist::where('user_id', Auth::user()->id)->with('wishlists')->get();
         return view('wishlist', compact('favorit'));
     }
 
@@ -107,10 +125,9 @@ class FontendController extends Controller
                 'size_name' => $size_id,
                 'product_id' => $product_id,
             ])->get();
-            // <option value="">S</option>
-            foreach ($inventories as   $inventory) {
 
-                $color_list .= "<option value='" . $inventory->color->id . "'>" . $inventory->color->name . "(Stack" . " " . $inventory->quantity . ")" . "</option>";
+            foreach ($inventories as $inventory) {
+                $color_list .= "<option value='" . $inventory->color->id . "'>" . $inventory->color->name . " (Stack " . $inventory->quantity . ")" . "</option>";
             }
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()], 500);
@@ -131,7 +148,7 @@ class FontendController extends Controller
         if ($reat_stock < $request->quantity) {
             echo "Not Avabile";
         } else {
-            // echo "very good";
+            // $ "very good";
 
             $count_product =  Cart::where([
                 'user_id' => Auth::id(),
@@ -162,7 +179,7 @@ class FontendController extends Controller
 
 
 
-            echo "success";
+            echo "add to card";
         }
     }
     public function view_card(Request $request)
@@ -230,7 +247,7 @@ class FontendController extends Controller
             echo "success";
         } catch (\Throwable $th) {
 
-            echo $th->getMessage();
+            $$th->getMessage();
         }
     }
 
@@ -281,8 +298,10 @@ class FontendController extends Controller
 
         $check_link = strpos(url()->previous(), "card");
         if ($check_link || strpos(url()->previous(), "Checkout")) {
+
             $address = CustomerAddress::where('customer_id', Auth::id())->get();
             $cart = Cart::where('user_id', Auth::id())->get();
+
             return view('checkout', compact('address', 'cart'));
         } else {
             abort(404);
@@ -317,4 +336,164 @@ class FontendController extends Controller
         }
         return back()->with('success', 'Address Added');
     }
+
+    public function checkout_final(Request $request)
+    {
+
+
+        $request->validate([
+            'address_id' => 'required',
+            'delivery_option' => 'required',
+            'payment_option' => 'required',
+        ]);
+
+
+        try {
+            $invoice_number = Carbon::now()->format('Y') . '-' . Carbon::now()->format('m') . '-' . Str::random(5);
+            $cupon_name =  session('s_cupon_name');
+
+            $sub_toatal = session('s_sub_total');
+
+            $disscount = session('s_discount');
+
+            $total_disscount = session('s_total_discount');
+            $total_ammount = session('s_total_ammount');
+
+            if ($request->delivery_option == 1) {
+                $delivery_charge = 60;
+            } else {
+                $delivery_charge = 70;
+            }
+
+            if ($request->payment_option == "cod") {
+                $invoice_id = Invoice::insertGetId([
+                    'invoice_no' => $invoice_number,
+                    'user_id' => Auth::id(),
+                    'cupon_name' => $cupon_name,
+                    'sub_total' => $sub_toatal,
+                    'discount' => $disscount,
+                    'total_discount' => $total_disscount,
+                    'total_amount' =>  $total_ammount,
+                    'address_id' => $request->address_id,
+                    'delivery_option' => $delivery_charge,
+                    'payment_option' => $request->payment_option,
+                    'created_at' => Carbon::now(),
+
+                ]);
+
+                //cupondercement
+                if ($cupon_name != null) {
+                    Coupon::where('coupon_title', $cupon_name)->decrement('coupon_limit');
+                }
+                //cartDeatiles
+                $cart = Cart::where('user_id', Auth::id())->get();
+                foreach ($cart as $card) {
+                    invoice_Deatiles::insert([
+                        'invoice_id' => $invoice_id,
+                        'user_id' => $card->user_id,
+                        'product_id' => $card->product_id,
+                        'quantity' => $card->quantity,
+                        'color_id' => $card->color_id,
+                        'size_id' => $card->size_id,
+                        'pursing_price' => Product::find($card->product_id)->discount_price,
+                        'created_at' => Carbon::now(),
+
+                    ]);
+
+                    //dercement producti nventory
+
+                    Inventory::where([
+                        'product_id' => $card->product_id,
+                        'color_name' => $card->color_id,
+                        'size_name' => $card->size_id,
+                    ])->decrement('quantity', $card->quantity);
+                }
+                //cart delete
+                Cart::where('user_id', Auth::id())->delete();
+
+                //session delete
+                session()->forget(['s_sub_total', 's_discount', 's_total_discount', 's_total_ammount', 's_cupon_name']);
+
+                return redirect('/view/card')->with('success', 'Order Placed ');
+            } else {
+
+
+                if ($request->delivery_option == 1) {
+                    $delivery_charge = 60;
+                } else {
+                    $delivery_charge = 70;
+                }
+
+                $invoice_id = Invoice::insertGetId([
+                    'invoice_no' => $invoice_number,
+                    'user_id' => Auth::id(),
+                    'cupon_name' => $cupon_name,
+                    'sub_total' => $sub_toatal,
+                    'discount' => $disscount,
+                    'total_discount' => $total_disscount,
+                    'total_amount' =>  $total_ammount,
+                    'address_id' => $request->address_id,
+                    'delivery_option' => $delivery_charge,
+                    'payment_option' => $request->payment_option,
+                    'created_at' => Carbon::now(),
+
+                ]);
+
+
+
+                if ($cupon_name != null) {
+                    Coupon::where('coupon_title', $cupon_name)->decrement('coupon_limit');
+                }
+                //cartDeatiles
+                $cart = Cart::where('user_id', Auth::id())->get();
+                foreach ($cart as $card) {
+                    invoice_Deatiles::insert([
+                        'invoice_id' => $invoice_id,
+                        'user_id' => $card->user_id,
+                        'product_id' => $card->product_id,
+                        'quantity' => $card->quantity,
+                        'color_id' => $card->color_id,
+                        'size_id' => $card->size_id,
+                        'pursing_price' => Product::find($card->product_id)->discount_price,
+                        'created_at' => Carbon::now(),
+
+                    ]);
+
+                    //dercement producti nventory
+
+                    Inventory::where([
+                        'product_id' => $card->product_id,
+                        'color_name' => $card->color_id,
+                        'size_name' => $card->size_id,
+                    ])->decrement('quantity', $card->quantity);
+                }
+                //cart delete
+                Cart::where('user_id', Auth::id())->delete();
+                session()->put('invoice_id', $invoice_id);
+                return redirect('/payment');
+            }
+
+
+            // return back()->with('success', 'Order Placed');
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
+    public function invoice_details($id)
+    {
+
+        try {
+    $invoice =Invoice::with('invoiceDownload')->find($id);
+            $adderss = CustomerAddress::where('customer_id', $invoice->user_id)->first();
+          // $invoice_details = invoice_Deatiles::where('invoice_id', $id)->get();
+
+            $pdf = \PDF::loadView('invoice', compact('invoice',  'adderss'));
+            return $pdf->download('invoice.pdf');
+        } catch (\Throwable $th) {
+            $th->getMessage();
+        }
+    }
+
+
 }

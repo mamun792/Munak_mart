@@ -10,7 +10,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\CouponController;
-
+use App\Http\Controllers\CustomerProfileController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Treands;
 
 Route::get('/',[FontendController::class,'index'])->name('/');
 Route::get('/product/detalis/{id}',[FontendController::class,'product_detalis'])->name('product.detalis');
@@ -21,7 +23,9 @@ Route::get('/wishlist/delete/{id}',[FontendController::class,'wishlist_delete'])
 Route::post('/custom/login',[FontendController::class,'custom_login'])->name('custom_login');
 Route::get('/shop/{id}',[FontendController::class,'shop'])->name('shop');
 Route::get('/Checkout',[FontendController::class,'checkout'])->name('checkout');
+Route::post('/Checkout/final',[FontendController::class,'checkout_final'])->name('checkout.final');
 Route::post('/Costomer/adderss/add', [FontendController::class, 'costomer_adderss_add'])->name('costomer.adderss.add');
+Route::get('/invoice/details/{id}', [FontendController::class, 'invoice_details'])->name('invoice.details');
 
 Route::get('/product/filter',[FontendController::class,'product_fillter'])->name('product.fillter');
 Route::post('/get/color/list',[FontendController::class,'get_color_list'])->name('get.color.list');
@@ -42,10 +46,15 @@ Route::delete('/coupons/{coupon}', [CouponController::class, 'destroy'])->name('
 Route::get('/dashboard',[BackendController::class,'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 //CategoriesController
-Route::resource('categories', CategoryController::class);
-Route::get('/categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
-Route::get('/categories/edit/{id}', [CategoryController::class, 'show'])->name('categories.show');
+// Route::resource('categories', CategoryController::class);
+// Route::get('/categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+// Route::get('/categories/edit/{id}', [CategoryController::class, 'show'])->name('categories.show');
 
+Route::middleware(['can:add categories'])->group(function () {
+    Route::resource('categories', CategoryController::class);
+    Route::get('/categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+    Route::get('/categories/edit/{id}', [CategoryController::class, 'edit'])->name('categories.edit');
+});
 
 //usersController
 Route::get('/users',[UsersController::class,'users'])->name('users');
@@ -72,8 +81,21 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//TrendingProductController
+Route::get('/trending/product',[Treands::class,'trending_product'])->name('trending.product');
 
+//payementController Strive
 
+Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
+Route::post('/handle-payment', [PaymentController::class, 'handlePayment'])->name('payment.handle');
+Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+Route::get('/payment/failure', [PaymentController::class, 'paymentFailure'])->name('payment.failure');
+
+//CustomerController
+
+Route::get('/customer/dashboard', [CustomerProfileController::class, 'index'])->name('customer');
+Route::get('/address/edit/{id}', [CustomerProfileController::class, 'address_edit'])->name('address.edit');
+Route::post('/address/update/{id}', [CustomerProfileController::class, 'address_update'])->name('address.update');
 //googleLiginController
 
 Route::get('login/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('login.google');

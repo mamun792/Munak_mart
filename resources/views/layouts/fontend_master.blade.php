@@ -47,6 +47,12 @@
     <script src="https://kit.fontawesome.com/d7ebd3584d.js" crossorigin="anonymous"></script>
     <!-- Template css -->
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('fonend_asset/css/style.css') }}">
+
+   <!----DataTable--->
+   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.css" />
+   <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+
 </head>
 
 <body class="bg-effect">
@@ -167,16 +173,31 @@
                                         </a>
                                     </li>
                                     <li class="right-side">
-                                        <a href="{{ route('wishlist') }}"
-                                            class="btn p-0 position-relative header-wishlist">
-                                            <i data-feather="heart"></i>
-                                            @if (auth()->check() && withlist_count() > 0)
-                                                <span class="position-absolute top-0 start-100 translate-middle badge">
-                                                    {{ withlist_count() }}
-                                                </span>
-                                            @endif
+                                        @if (Auth::check())
+                                            <a href="{{ route('wishlist') }}"
+                                                class="btn p-0 position-relative header-wishlist">
+                                                <i data-feather="heart"></i>
+                                                @if (auth()->check() && withlist_count() > 0)
+                                                    <span
+                                                        class="position-absolute top-0 start-100 translate-middle badge">
+                                                        {{ withlist_count() }}
+                                                    </span>
+                                                @endif
 
-                                        </a>
+                                            </a>
+                                        @else
+                                            <a href="#" class="btn p-0 position-relative header-wishlist">
+                                                <i data-feather="heart"></i>
+                                                @if (auth()->check() && withlist_count() > 0)
+                                                    <span
+                                                        class="position-absolute top-0 start-100 translate-middle badge">
+                                                        {{ withlist_count() }}
+                                                    </span>
+                                                @endif
+
+                                            </a>
+                                        @endif
+
                                     </li>
                                     <li class="right-side">
                                         <div class="onhover-dropdown header-badge">
@@ -194,7 +215,7 @@
 
                                             <div class="onhover-div">
                                                 <ul class="cart-list">
-                                                    @if (auth()->check() && cards()->count() >0)
+                                                    @if (auth()->check() && cards()->count() > 0)
 
                                                         @foreach (cards() as $card)
                                                             <li class="product-box-contain">
@@ -224,7 +245,7 @@
 
                                                 <div class="price-box">
                                                     <h5>Total :</h5>
-                                                    <h4 class="theme-color fw-bold">500</h4>
+                                                    <h4 class="theme-color fw-bold">{{total_price()}}</h4>
                                                 </div>
 
                                                 <div class="button-group">
@@ -249,20 +270,44 @@
                                         </div>
 
                                         <div class="onhover-div onhover-div-login">
-                                            <ul class="user-box-name">
-                                                <li class="product-box-contain">
-                                                    <i></i>
-                                                    <a href="{{ route('login') }}">Log In</a>
-                                                </li>
+                                            @if (Auth::check())
+                                                <ul class="user-box-name">
+                                                    <li class="product-box-contain">
+                                                        <i></i>
+                                                        <a href="{{ route('profile.edit') }}">Profile</a>
+                                                    </li>
+                                                    <li class="product-box-contain">
+                                                        <a href="{{ route('customer') }}">Dashboard</a>
+                                                    </li>
+                                                    {{-- <li>
+                                                        <form method="POST" action="{{ route('logout') }}">
+                                                            @csrf
+                                                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                                                onclick="event.preventDefault();
+                                                                this.closest('form').submit();">
 
-                                                <li class="product-box-contain">
-                                                    <a href="{{ route('register') }}">Register</a>
-                                                </li>
+                                                                <span class="text-danger">Logout</span>
 
-                                                <li class="product-box-contain">
-                                                    <a href="forgot.html">Forgot Password</a>
-                                                </li>
-                                            </ul>
+                                                            </a>
+                                                    </li> --}}
+                                                </ul>
+                                            @else
+                                                <ul class="user-box-name">
+                                                    <li class="product-box-contain">
+                                                        <i></i>
+                                                        <a href="{{ route('login') }}">Log In</a>
+                                                    </li>
+
+                                                    <li class="product-box-contain">
+                                                        <a href="{{ route('register') }}">Register</a>
+                                                    </li>
+
+                                                    <li class="product-box-contain">
+                                                        <a href="{{ route('password.request') }}">Forgot Password</a>
+                                                    </li>
+                                                </ul>
+                                            @endif
+
                                         </div>
                                     </li>
                                 </ul>
@@ -294,7 +339,7 @@
                                 <ul class="category-list">
                                     @foreach (list_of_category() as $category)
                                         <li class="onhover-category-list">
-                                            <a href="{{route('shop',$category->id)}}" class="category-name">
+                                            <a href="{{ route('shop', $category->id) }}" class="category-name">
                                                 <img src="{{ asset('image/category/' . $category->photo) }}"
                                                     alt="not">
                                                 <h6>{{ $category->name }}</h6>
@@ -323,7 +368,7 @@
                                             </li>
 
                                             <li class="nav-item dropdown">
-                                                <a class="nav-link" href="{{route('shop','all')}}">Shop</a>
+                                                <a class="nav-link" href="{{ route('shop', 'all') }}">Shop</a>
                                             </li>
 
                                             <li class="nav-item dropdown">
@@ -846,6 +891,9 @@
     <!-- thme setting js -->
     <script src="{{ asset('fonend_asset/js/theme-setting.js') }}"></script>
 
+
+    <!-- Include DataTables -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     @yield('fotter_scprit')
 </body>
 

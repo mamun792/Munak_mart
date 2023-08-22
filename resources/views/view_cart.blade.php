@@ -33,6 +33,15 @@
                 <div class="col-md-9">
                     <div class="cart-table">
                         <div class="cart-table">
+
+                            @if (session('success'))
+
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+
+                            @endif
                             @php
                                 $errors = false;
                             @endphp
@@ -63,7 +72,8 @@
                                                                 </li>
 
                                                                 <li class="text-content"><span class="text-title">Sold
-                                                                        By:</span> {{ $cart->product->user->name }}</li>
+                                                                        By:</span> {{ $cart->product->user->name }}
+                                                                </li>
 
                                                                 <li class="text-content"><span
                                                                         class="text-title">Quantity:</span>
@@ -121,7 +131,8 @@
                                                 <td class="save-remove">
                                                     <h4 class="table-title text-content">Action</h4>
                                                     <a class="save notifi-wishlist" onclick="update({{ $cart->id }})"
-                                                        href="javascript:void(0)">Save for later {{ $cart->id }}</a>
+                                                        href="javascript:void(0)">Save for later
+                                                        {{ $cart->id }}</a>
                                                     <a class="remove" onclick="deleteItem({{ $cart->id }})"
                                                         href="javascript:void(0)">Remove</a>
 
@@ -162,7 +173,7 @@
                                     <h6 class="text-content mb-2">Coupon Apply</h6>
                                     <div class="mb-3 coupon-box input-group">
                                         <input type="text" class="form-control" name="coupon"
-                                            placeholder="Enter Coupon Code Here..." value="{{$copon}}">
+                                            placeholder="Enter Coupon Code Here..." value="{{ $copon }}">
                                         <button type="submit" class="btn-apply">Apply</button>
                                 </form>
                             </div>
@@ -178,13 +189,15 @@
 
                             <li>
                                 <h4>Coupon Discount</h4>
-                                <h4 class="price">(-) {{ isset($discount) ? $discount.'%' : $discounts }}</h4>
+                                <h4 class="price">(-) {{ isset($discount) ? $discount . '%' : $discounts }}</h4>
 
                             </li>
 
                             <li class="align-items-start">
-                                <h4>Shipping</h4>
-                                <h4 class="price text-end">$6.90</h4>
+                                <h4>Total Save</h4>
+                                <h4 class="price text-end">
+                                    {{ isset($discount) ? total_price() - total_price() - (total_price() * $discount) / 100 : $discounts }}
+                                </h4>
                             </li>
                         </ul>
                     </div>
@@ -192,10 +205,22 @@
                     <ul class="summery-total">
                         <li class="list-total border-top-0">
                             <h4>Total (BD)</h4>
-                            <h4 class="price theme-color">{{ isset($discount) ? total_price() - (total_price() * $discount / 100) : total_price()-$discounts }}
+                            <h4 class="price theme-color">
+                                {{ isset($discount) ? total_price() - (total_price() * $discount) / 100 : total_price() - $discounts }}
                             </h4>
                         </li>
                     </ul>
+                    {{-- Session Add --}}
+                    @php
+                        session(['s_total_ammount' => isset($discount) ? total_price() - (total_price() * $discount) / 100 : total_price() - $discounts]);
+                        session(['s_total_discount' => isset($discount) ? total_price() - total_price() - (total_price() * $discount) / 100 : $discounts]);
+                        session(['s_cupon_name' => $copon]);
+                        session(['s_discount' => isset($discount) ? $discount : $discounts]);
+                        session(['s_sub_total' => total_price()]);
+                    @endphp
+
+
+                    {{-- Session Closed --}}
 
                     <div class="button-group cart-button">
                         <ul>
@@ -205,7 +230,7 @@
                                     <h4><span class="badge bg-warning text-dark p-3 ">Please update or remove
                                             cart</span></h4>
                                 @else
-                                    <button onclick="location.href = '{{route('checkout')}}';"
+                                    <button onclick="location.href = '{{ route('checkout') }}';"
                                         class="btn btn-animation proceed-btn fw-bold">Process To Checkout</button>
                                 @endif
 

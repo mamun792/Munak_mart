@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
@@ -49,6 +50,8 @@ class CategoryController extends Controller
         );
         try {
 
+
+
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
                 $filename = time() . '.' . $photo->getClientOriginalExtension();
@@ -68,6 +71,7 @@ class CategoryController extends Controller
                 'created_at' => Carbon::now(),
             ]);
             return back()->with('success', 'Category created successfully.');
+
         } catch (\Throwable $th) {
 
             return back()->with('error', 'Error creating category: ' . $th->getMessage());
@@ -147,9 +151,14 @@ class CategoryController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
+        if (Gate::denies('add categories')) {
+            return back()->with('error', 'You are not authorized to delete categories.');
+        }
+
 
         $category = Category::find($id);
         $category->delete();
         return back()->with('success', 'Category deleted successfully');
+        }
     }
-}
+

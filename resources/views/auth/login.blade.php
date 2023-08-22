@@ -76,7 +76,7 @@
                                             <input class="checkbox_animated check-box" type="checkbox" name="remember">
                                             <label class="form-check-label" for="flexCheckDefault">Remember me</label>
                                         </div>
-                                        <a href="forgot.html" class="forgot-password">Forgot Password?</a>
+                                        <a href="{{route('password.request')}}" class="forgot-password">Forgot Password?</a>
                                     </div>
                                 </div>
 

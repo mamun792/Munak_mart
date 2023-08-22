@@ -194,18 +194,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- <div class="row align-items-center">
-                                            <label class="col-sm-3 col-form-label form-label-title">Refundable</label>
-                                            <div class="col-sm-9">
-                                                <label class="switch">
-                                                    <input type="checkbox" name="refundable" >
-                                                    <span class="switch-state"></span>
-                                                </label>
-                                            </div>
-                                            @error('refundable')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div> --}}
+
                                         <div class="mb-4 row">
                                             <div class="col-sm-3"></div>
                                             <div class="col-sm-9">

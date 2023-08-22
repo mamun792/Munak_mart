@@ -28,280 +28,302 @@
     <!-- Checkout section Start -->
     <section class="checkout-section-2 section-b-space">
         <div class="container-fluid-lg">
-            <div class="row g-sm-4 g-3">
-                <div class="col-lg-8">
-                    @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>{{ session('success') }}</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <form action="{{ route('checkout.final') }}" method="POST">
+                @csrf
+                <div class="row g-sm-4 g-3">
+
+                    <div class="col-lg-8">
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>{{ session('success') }}</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
+                            </ul>
                         </div>
                     @endif
-                    <div class="left-sidebar-checkout">
-                        <div class="checkout-detail-box">
-                            <ul>
-                                <li>
-                                    <div class="checkout-icon">
-                                        <lord-icon target=".nav-item" src="https://cdn.lordicon.com/ggihhudh.json"
-                                            trigger="loop-on-hover"
-                                            colors="primary:#121331,secondary:#646e78,tertiary:#0baf9a" class="lord-icon">
-                                        </lord-icon>
-                                    </div>
-                                    <div class="checkout-box">
-                                        <div class="checkout-title">
-                                            <h4>Delivery Address</h4>
-                                        </div>
-
-
-                                        <div class="checkout-detail">
-
-                                            <div class="row g-4">
-                                                @foreach ($address as $addres)
-                                                    <div class="col-xxl-6 col-lg-12 col-md-6">
-
-                                                        <div class="delivery-address-box">
-
-
-
-                                                            <div>
-
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="address_type"{{$loop->index==0 ? 'checked="checked"' : ''}}
-                                                                       >
-                                                                </div>
-
-                                                                <div class="label">
-                                                                    <label>{{ $addres->Label }}</label>
-                                                                </div>
-
-                                                                <ul class="delivery-address-detail">
-                                                                    <li>
-                                                                        <h4 class="fw-500">{{ $addres->CustomerName }}</h4>
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <p class="text-content"><span
-                                                                                class="text-title">Address
-                                                                                :</span>{{ $addres->CustomerAddress }}
-                                                                        </p>
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <h6 class="text-content"><span
-                                                                                class="text-title">Zip
-                                                                                Code :</span>
-                                                                            {{ $addres->ZipCode }}</h6>
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <h6 class="text-content mb-0"><span
-                                                                                class="text-title">Phone
-                                                                                :</span> {{ $addres->PhoneNumber }}</h6>
-                                                                    </li>
-                                                                </ul>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                    </div>
-                                                @endforeach
-                                            </div>
-
-
-                                        </div>
-
-                                    </div>
-                                    <div class="d-flex justify-content-center ">
-                                        <button type="button" class="btn bg-light text-dark" data-bs-toggle="modal"
-                                            data-bs-target="#staticBackdrop">
-                                            Add New Address
-                                        </button>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="checkout-icon">
-                                        <lord-icon target=".nav-item" src="https://cdn.lordicon.com/oaflahpk.json"
-                                            trigger="loop-on-hover" colors="primary:#0baf9a" class="lord-icon">
-                                        </lord-icon>
-                                    </div>
-                                    <div class="checkout-box">
-                                        <div class="checkout-title">
-                                            <h4>Delivery Option</h4>
-                                        </div>
-
-                                        <div class="checkout-detail">
-                                            <div class="row g-4">
-                                                <div class="col-xxl-6">
-                                                    <div class="delivery-option">
-                                                        <div class="delivery-category">
-                                                            <div class="shipment-detail">
-                                                                <div class="form-check custom-form-check hide-check-box">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="in_dhaka" checked>
-                                                                    <label class="form-check-label" for="standard">Inside Dhaka</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-xxl-6">
-                                                    <div class="delivery-option">
-                                                        <div class="delivery-category">
-                                                            <div class="shipment-detail">
-                                                                <div
-                                                                    class="form-check mb-0 custom-form-check show-box-checked">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="out_dhaka">
-                                                                    <label class="form-check-label" for="future">Out side Dhaka</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="checkout-icon">
-                                        <lord-icon target=".nav-item" src="https://cdn.lordicon.com/qmcsqnle.json"
-                                            trigger="loop-on-hover" colors="primary:#0baf9a,secondary:#0baf9a"
-                                            class="lord-icon">
-                                        </lord-icon>
-                                    </div>
-                                    <div class="checkout-box">
-                                        <div class="checkout-title">
-                                            <h4>Payment Option</h4>
-                                        </div>
-
-                                        <div class="checkout-detail">
-                                            <div class="accordion accordion-flush custom-accordion"
-                                                id="accordionFlushExample">
-                                                <div class="accordion-item">
-                                                    <div class="accordion-header" id="flush-headingFour">
-                                                        <div class="accordion-button collapsed">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="cash"><input
-                                                                        class="form-check-input mt-0" type="radio"
-                                                                        name="cash_on"  checked>
-                                                                    Cash
-                                                                    On Delivery</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="flush-collapseFour" class="accordion-collapse collapse show"
-                                                        data-bs-parent="#accordionFlushExample">
-                                                        <div class="accordion-body">
-                                                            <p class="cod-review">Pay digitally with SMS Pay
-                                                                Link. Cash may not be accepted in COVID restricted
-                                                                areas. <a href="javascript:void(0)">Know more.</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="accordion-item">
-                                                    <div class="accordion-header" id="flush-headingOne">
-                                                        <div class="accordion-button collapsed" data-bs-toggle="collapse"
-                                                            data-bs-target="#flush-collapseOne">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="credit"><input
-                                                                        class="form-check-input mt-0" type="radio"
-                                                                        name="online_payment" >
-                                                                    Online Payemnt</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="right-side-summery-box">
-                        <div class="summery-box-2">
-                            <div class="summery-header">
-                                <h3>Order Summery</h3>
-
-                            </div>
-
-                            <ul class="summery-contain">
-                                @foreach (cards() as $carts)
+                        <div class="left-sidebar-checkout">
+                            <div class="checkout-detail-box">
+                                <ul>
                                     <li>
-                                        <img src="{{ asset('image/products/' . $carts->product->p_image) }}"
-                                            class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                        <h4>{{ $carts->product->product_name }} <span>X {{ $carts->quantity }}</span></h4>
-                                        <h4 class="price">{{ $carts->quantity * $carts->product->discount_price }}</h4>
+                                        <div class="checkout-icon">
+                                            <lord-icon target=".nav-item" src="https://cdn.lordicon.com/ggihhudh.json"
+                                                trigger="loop-on-hover"
+                                                colors="primary:#121331,secondary:#646e78,tertiary:#0baf9a"
+                                                class="lord-icon">
+                                            </lord-icon>
+                                        </div>
+                                        <div class="checkout-box">
+                                            <div class="checkout-title">
+                                                <h4>Delivery Address</h4>
+                                            </div>
+
+
+                                            <div class="checkout-detail">
+
+                                                <div class="row g-4">
+                                                    @foreach ($address as $addres)
+                                                        <div class="col-xxl-6 col-lg-12 col-md-6">
+
+                                                            <div class="delivery-address-box">
+
+
+
+                                                                <div>
+
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            value="{{ $addres->id }}"
+                                                                            name="address_id"{{ $loop->index == 0 ? 'checked="checked"' : '' }}>
+                                                                    </div>
+
+                                                                    <div class="label">
+                                                                        <label>{{ $addres->Label }}</label>
+                                                                    </div>
+
+                                                                    <ul class="delivery-address-detail">
+                                                                        <li>
+                                                                            <h4 class="fw-500">{{ $addres->CustomerName }}
+                                                                            </h4>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <p class="text-content"><span
+                                                                                    class="text-title">Address
+                                                                                    :</span>{{ $addres->CustomerAddress }}
+                                                                            </p>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <h6 class="text-content"><span
+                                                                                    class="text-title">Zip
+                                                                                    Code :</span>
+                                                                                {{ $addres->ZipCode }}</h6>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <h6 class="text-content mb-0"><span
+                                                                                    class="text-title">Phone
+                                                                                    :</span> {{ $addres->PhoneNumber }}</h6>
+                                                                        </li>
+                                                                    </ul>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+                                        <div class="d-flex justify-content-center ">
+                                            <button type="button" class="btn bg-light text-dark" data-bs-toggle="modal"
+                                                data-bs-target="#staticBackdrop">
+                                                Add New Address
+                                            </button>
+                                        </div>
+
                                     </li>
-                                @endforeach
-                            </ul>
 
-                            <ul class="summery-total">
-                                <li>
-                                    <h4>Save</h4>
-                                    <h4 class="price">
-                                        {{($carts->quantity*$carts->product->regular_price)-($carts->quantity * $carts->product->discount_price) }}
-                                    </h4>
-                                </li>
+                                    <li>
+                                        <div class="checkout-icon">
+                                            <lord-icon target=".nav-item" src="https://cdn.lordicon.com/oaflahpk.json"
+                                                trigger="loop-on-hover" colors="primary:#0baf9a" class="lord-icon">
+                                            </lord-icon>
+                                        </div>
+                                        <div class="checkout-box">
+                                            <div class="checkout-title">
+                                                <h4>Delivery Option</h4>
+                                            </div>
 
-                                <li>
-                                    <h4>Disscuont</h4>
-                                    <h4 class="price">{{$carts->product->discount}}%</h4>
-                                </li>
+                                            <div class="checkout-detail">
+                                                <div class="row g-4">
+                                                    <div class="col-xxl-6">
+                                                        <div class="delivery-option">
+                                                            <div class="delivery-category">
+                                                                <div class="shipment-detail">
+                                                                    <div
+                                                                        class="form-check custom-form-check hide-check-box">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="delivery_option" value="1" checked>
+                                                                        <label class="form-check-label"
+                                                                            for="standard">Inside
+                                                                            Dhaka (+60 tk)</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xxl-6">
+                                                        <div class="delivery-option">
+                                                            <div class="delivery-category">
+                                                                <div class="shipment-detail">
+                                                                    <div
+                                                                        class="form-check mb-0 custom-form-check show-box-checked">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="delivery_option" value="2">
+                                                                        <label class="form-check-label" for="future">Out
+                                                                            side
+                                                                            Dhaka (+70 tk)</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
 
 
-                                <li>
-                                    <h4>Coupon/Code</h4>
-                                    <h4 class="price">mamun</h4>
-                                </li>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
 
-                                <li class="list-total">
-                                    <h4>Total (BD)</h4>
-                                    <h4 class="price">{{total_price()}}</h4>
-                                </li>
-                            </ul>
+                                    <li>
+                                        <div class="checkout-icon">
+                                            <lord-icon target=".nav-item" src="https://cdn.lordicon.com/qmcsqnle.json"
+                                                trigger="loop-on-hover" colors="primary:#0baf9a,secondary:#0baf9a"
+                                                class="lord-icon">
+                                            </lord-icon>
+                                        </div>
+                                        <div class="checkout-box">
+                                            <div class="checkout-title">
+                                                <h4>Payment Option</h4>
+                                            </div>
+
+                                            <div class="checkout-detail">
+                                                <div class="accordion accordion-flush custom-accordion"
+                                                    id="accordionFlushExample">
+                                                    <div class="accordion-item">
+                                                        <div class="accordion-header" id="flush-headingFour">
+                                                            <div class="accordion-button collapsed">
+                                                                <div class="custom-form-check form-check mb-0">
+                                                                    <label class="form-check-label" for="cash"><input
+                                                                            class="form-check-input mt-0" type="radio"
+                                                                            value="cod" name="payment_option" checked>
+                                                                        Cash
+                                                                        On Delivery (COD)</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="flush-collapseFour"
+                                                            class="accordion-collapse collapse show"
+                                                            data-bs-parent="#accordionFlushExample">
+                                                            <div class="accordion-body">
+                                                                <p class="cod-review">Pay digitally with SMS Pay
+                                                                    Link. Cash may not be accepted in COVID restricted
+                                                                    areas.</a>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="accordion-item">
+                                                        <div class="accordion-header" id="flush-headingOne">
+                                                            <div class="accordion-button collapsed"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#flush-collapseOne">
+                                                                <div class="custom-form-check form-check mb-0">
+                                                                    <label class="form-check-label" for="credit"><input
+                                                                            class="form-check-input mt-0" type="radio"
+                                                                            value="online" name="payment_option">
+                                                                        Online Payemnt</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
+                    </div>
 
-                        {{-- <div class="checkout-offer">
-                            <div class="offer-title">
-                                <div class="offer-icon">
-                                    <img src="../assets/images/inner-page/offer.svg" class="img-fluid" alt="">
+                    <div class="col-lg-4">
+                        <div class="right-side-summery-box">
+                            <div class="summery-box-2">
+                                <div class="summery-header">
+                                    <h3>Order Summery</h3>
+
+
                                 </div>
-                                <div class="offer-name">
-                                    <h6>Available Offers</h6>
-                                </div>
+
+                                <ul class="summery-contain">
+                                    @foreach (cards() as $carts)
+                                        <li>
+                                            <img src="{{ asset('image/products/' . $carts->product->p_image) }}"
+                                                class="img-fluid blur-up lazyloaded checkout-image" alt="">
+                                            <h4>{{ $carts->product->product_name }} <span>X {{ $carts->quantity }}</span>
+                                            </h4>
+                                            <h4 class="price">{{ $carts->quantity * $carts->product->discount_price }}
+                                            </h4>
+                                        </li>
+                                    @endforeach
+                                </ul>
+
+                                <ul class="summery-total">
+                                    <li>
+                                        <h4>Coupon/Code</h4>
+                                        <h4 class="price">{{ session('s_cupon_name') }}</h4>
+                                    </li>
+                                    <li>
+                                        <h4>Subtotal</h4>
+                                        <h4 class="price">{{ session('s_sub_total') }}</h4>
+                                    </li>
+
+
+                                    <li>
+                                        <h4>Disscuont</h4>
+                                        <h4 class="price">
+                                            {{ session('s_discount') }}
+                                        </h4>
+                                    </li>
+                                    <li>
+                                        <h4>Save</h4>
+                                        <h4 class="price">
+                                            {{ session('s_total_discount') }}
+                                        </h4>
+                                    </li>
+
+
+
+
+                                    <li class="list-total">
+                                        <h4>Total (BD)</h4>
+                                        <h4 class="price">{{ session('s_total_ammount') }}</h4>
+                                    </li>
+                                </ul>
                             </div>
 
-                            <ul class="offer-detail">
-                                <li>
-                                    <p>Combo: BB Royal Almond/Badam Californian, Extra Bold 100 gm...</p>
-                                </li>
-                                <li>
-                                    <p>combo: Royal Cashew Californian, Extra Bold 100 gm + BB Royal Honey 500 gm</p>
-                                </li>
-                            </ul>
-                        </div> --}}
 
-                        <button class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Place Order</button>
+
+                            <button type="submit" class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Place
+                                Order</button>
+
+                        </div>
+
                     </div>
-                </div>
-            </div>
+            </form>
+        </div>
         </div>
     </section>
     <!-- Checkout section End -->

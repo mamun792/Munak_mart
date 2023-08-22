@@ -35,5 +35,11 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
          'redirect' =>'http://127.0.0.1:8000/google/callback',
     ],
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    ],
+
 
 ];

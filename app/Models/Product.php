@@ -46,4 +46,6 @@ class Product extends Model
     public function product(){
         return $this->hasOne(Inventory::class);
     }
+
+
 }

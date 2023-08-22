@@ -145,12 +145,16 @@
                                             <option value="{{ $product_sizes->size->id }}">
                                                 {{ $product_sizes->size->name }}</option>
                                         @endforeach
+
+
                                     </select>
+
+
                                     <div class="product-title">
 
                                         <h4>Size</h4>
                                     </div>
-                                    <select onchange="size_color()" class="form-control list_color" id="color_list">
+                                    <select  class="form-control list_color" id="color_list">
                                         <option value="">Chose Color</option>
 
                                     </select>
@@ -188,7 +192,7 @@
 
                                 @if (auth()->check())
                                     <div class="buy-box">
-                                        @if (App\Models\Wishlist::where(['user_id' => auth()->user()->id, 'product_id' => $poducts->id])->exists())
+                                        @if ( $whishlist_checks==1)
                                             <i class="text-danger" data-feather="heart"></i>
                                             <span>Already Add To Wishlist</span>
                                         @else
@@ -233,31 +237,31 @@
                                     <ul>
                                         <li>
                                             <a href="javascript:void(0)">
-                                                <img src="../assets/images/product/payment/1.svg" class="blur-up lazyload"
+                                                <img src="{{asset('fonend_asset/images/product/payment/1.svg')}}" class="blur-up lazyload"
                                                     alt="">
                                             </a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">
-                                                <img src="../assets/images/product/payment/2.svg" class="blur-up lazyload"
+                                                <img src="{{asset('fonend_asset/images/product/payment/2.svg')}}" class="blur-up lazyload"
                                                     alt="">
                                             </a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">
-                                                <img src="../assets/images/product/payment/3.svg" class="blur-up lazyload"
+                                                <img src="{{asset('fonend_asset/images/product/payment/3.svg')}}" class="blur-up lazyload"
                                                     alt="">
                                             </a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">
-                                                <img src="../assets/images/product/payment/4.svg" class="blur-up lazyload"
+                                                <img src="{{asset('fonend_asset/images/product/payment/4.svg')}}" class="blur-up lazyload"
                                                     alt="">
                                             </a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">
-                                                <img src="../assets/images/product/payment/5.svg" class="blur-up lazyload"
+                                                <img src="{{asset('fonend_asset/images/product/payment/5.svg')}}" class="blur-up lazyload"
                                                     alt="">
                                             </a>
                                         </li>
@@ -769,62 +773,7 @@
                                         </div>
                                     </li>
 
-                                    <li>
-                                        <div class="offer-product">
-                                            <a href="product-left-thumbnail.html" class="offer-image">
-                                                <img src="../assets/images/vegetable/product/24.png"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
 
-                                            <div class="offer-detail">
-                                                <div>
-                                                    <a href="product-left-thumbnail.html">
-                                                        <h6 class="name">Dates Medjoul Premium Imported</h6>
-                                                    </a>
-                                                    <span>450 G</span>
-                                                    <h6 class="price theme-color">$ 40.00</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="offer-product">
-                                            <a href="product-left-thumbnail.html" class="offer-image">
-                                                <img src="../assets/images/vegetable/product/25.png"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-
-                                            <div class="offer-detail">
-                                                <div>
-                                                    <a href="product-left-thumbnail.html">
-                                                        <h6 class="name">Good Life Walnut Kernels</h6>
-                                                    </a>
-                                                    <span>200 G</span>
-                                                    <h6 class="price theme-color">$ 52.00</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="mb-0">
-                                        <div class="offer-product">
-                                            <a href="product-left-thumbnail.html" class="offer-image">
-                                                <img src="../assets/images/vegetable/product/26.png"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-
-                                            <div class="offer-detail">
-                                                <div>
-                                                    <a href="product-left-thumbnail.html">
-                                                        <h6 class="name">Apple Red Premium Imported</h6>
-                                                    </a>
-                                                    <span>1 KG</span>
-                                                    <h6 class="price theme-color">$ 80.00</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -1048,7 +997,7 @@
     @section('fotter_scprit')
         <script>
             function size_color() {
-                var select = document.querySelector(".size_id").value;
+                var selectedSize = $(".size_id").val();
                 var product_id = "{{ $poducts->id }}";
 
                 $.ajaxSetup({
@@ -1060,7 +1009,7 @@
                     type: 'POST',
                     url: '/get/color/list',
                     data: {
-                        size: select,
+                        size: selectedSize,
                         product_id: product_id,
                     },
 
@@ -1082,6 +1031,8 @@
 
 
             }
+
+
 
             function checkEnableButton() {
 

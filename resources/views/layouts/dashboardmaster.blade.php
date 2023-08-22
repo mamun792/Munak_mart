@@ -173,7 +173,7 @@
 
 
                                 @if (auth()->check())
-                                    <p class="p-2">{{ auth()->user()->name }}</p>
+                                    <p class="p-2">{{ auth()->user()->name }} ({{auth()->user()->role}})</p>
                                 @endif
 
 
@@ -355,6 +355,22 @@
 
                                         <li>
                                             <a href="{{route('coupons.create')}}">Create Coupon</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                                        <i class="ri-list-check-2"></i>
+                                        <span>Treand</span>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <li>
+                                            <a href="{{ route('trending.product') }}">Add Traend</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="{{ route('categories.create') }}">Add New Category</a>
                                         </li>
                                     </ul>
                                 </li>
