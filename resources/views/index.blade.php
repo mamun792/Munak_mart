@@ -48,7 +48,7 @@
                 <div class="col-xl-8 ratio_65">
                     <div class="home-contain h-100">
                         <div class="h-100">
-                            <img src="{{ asset('fonend_asset/images/vegetable/banner/1.jpg') }}"
+                            <img src="{{ asset('image/trends/'.$tranding->image ) }}"
                                 class="bg-img blur-up lazyload" alt="">
                         </div>
                         <div class="home-detail p-center-left w-75">

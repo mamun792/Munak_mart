@@ -1,7 +1,8 @@
-@extends('layouts.dashboardmaster')
+@extends('layouts.fontend_master')
+
 
 @section('content')
-    <div class="page-body">
+    <div class="page-body ">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
@@ -129,8 +130,9 @@
             </div>
         </div>
     </div>
+    <br>
 @endsection
-@section('footer_scprit')
+@section('fotter_scprit')
     <script>
         const profilePictureInput = document.getElementById('profile-picture');
         const profilePicturePreview = document.getElementById('profile-picture-preview');
@@ -150,7 +152,7 @@
             }
         });
 
-        //show password
+
 
         const currentPasswordField = document.getElementById('current-password');
         const newPasswordField = document.getElementById('new-password');
@@ -180,7 +182,7 @@
             toggleConfirmPasswordButton.querySelector('i').classList.toggle('fa-eye-slash');
         });
 
-        //  check password match and show/hide the submit button
+
         const newPasswordInput = document.getElementById('new-password');
         const confirmPasswordInput = document.getElementById('confirm-password');
         const changePasswordButton = document.getElementById('change-password-button');

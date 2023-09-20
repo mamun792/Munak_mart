@@ -248,163 +248,286 @@
                                 src="{{ asset('backend_asset/images/logo/logo-white.png') }}" alt="logo">
                         </a>
                     </div>
-                    <nav class="sidebar-main">
-                        <div class="left-arrow" id="left-arrow">
-                            <i data-feather="arrow-left"></i>
-                        </div>
+@if (auth()->check())
+    @if (auth()->user()->role == 'admin')
+    <nav class="sidebar-main">
+        <div class="left-arrow" id="left-arrow">
+            <i data-feather="arrow-left"></i>
+        </div>
 
-                        <div id="sidebar-menu">
-                            <ul class="sidebar-links" id="simple-bar">
-                                <li class="back-btn"></li>
+        <div id="sidebar-menu">
+            <ul class="sidebar-links" id="simple-bar">
+                <li class="back-btn"></li>
 
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="index.html">
-                                        <i class="ri-home-line"></i>
-                                        <span>Dashboard</span>
-                                    </a>
-                                </li>
+                <li class="sidebar-list">
+                    <a class="sidebar-link sidebar-title link-nav" href="index.html">
+                        <i class="ri-home-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
 
-                                <li class="sidebar-list">
-                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
-                                        <i class="ri-store-3-line"></i>
-                                        <span>Product</span>
-                                    </a>
-                                    <ul class="sidebar-submenu">
-                                        <li>
-                                            <a href="{{ route('all.product') }}">Prodcts</a>
-                                        </li>
+                {{-- <li class="sidebar-list">
+                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-store-3-line"></i>
+                        <span>Product</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{ route('all.product') }}">Prodcts</a>
+                        </li>
 
-                                        <li>
-                                            <a href="{{ route('product.show') }}">Add New Products</a>
-                                        </li>
-                                    </ul>
-                                </li>
+                        <li>
+                            <a href="{{ route('product.show') }}">Add New Products</a>
+                        </li>
+                    </ul>
+                </li> --}}
 
-                                <li class="sidebar-list">
-                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
-                                        <i class="ri-list-check-2"></i>
-                                        <span>Category</span>
-                                    </a>
-                                    <ul class="sidebar-submenu">
-                                        <li>
-                                            <a href="{{ route('categories.index') }}">Category List</a>
-                                        </li>
+                <li class="sidebar-list">
+                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-list-check-2"></i>
+                        <span>Category</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{ route('categories.index') }}">Category List</a>
+                        </li>
 
-                                        <li>
-                                            <a href="{{ route('categories.create') }}">Add New Category</a>
-                                        </li>
-                                    </ul>
-                                </li>
+                        <li>
+                            <a href="{{ route('categories.create') }}">Add New Category</a>
+                        </li>
+                    </ul>
+                </li>
 
-                                <li class="sidebar-list">
-                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
-                                        <i class="ri-list-settings-line"></i>
-                                        <span>Attributes</span>
-                                    </a>
-                                    <ul class="sidebar-submenu">
-                                        <li>
-                                            <a href="attributes.html">Attributes</a>
-                                        </li>
+                {{-- <li class="sidebar-list">
+                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-list-settings-line"></i>
+                        <span>Attributes</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="attributes.html">Attributes</a>
+                        </li>
 
-                                        <li>
-                                            <a href="{{route('add.attribute')}}">Add Attributes</a>
-                                        </li>
-                                    </ul>
-                                </li>
+                        <li>
+                            <a href="{{route('add.attribute')}}">Add Attributes</a>
+                        </li>
+                    </ul>
+                </li> --}}
 
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title" href="javascript:void(0)">
-                                        <i class="ri-user-3-line"></i>
-                                        <span>Users</span>
-                                    </a>
-                                    <ul class="sidebar-submenu">
-                                        <li>
-                                            <a href="{{ route('users.list') }}">All users</a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('users') }}">Add new user</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title" href="javascript:void(0)">
-                                        <i class="ri-archive-line"></i>
-                                        <span>Orders</span>
-                                    </a>
-                                    <ul class="sidebar-submenu">
-                                        <li>
-                                            <a href="order-list.html">Order List</a>
-                                        </li>
-                                        <li>
-                                            <a href="order-detail.html">Order Detail</a>
-                                        </li>
-                                        <li>
-                                            <a href="order-tracking.html">Order Tracking</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="sidebar-list">
-                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
-                                        <i class="ri-price-tag-3-line"></i>
-                                        <span>Coupons</span>
-                                    </a>
-                                    <ul class="sidebar-submenu">
-                                        <li>
-                                            <a href="{{route('coupons.index')}}">Coupon List</a>
-                                        </li>
+                <li class="sidebar-list">
+                    <a class="sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-user-3-line"></i>
+                        <span>Users</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{ route('users.list') }}">All users</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('users') }}">Add new user</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-list">
+                    <a class="sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-archive-line"></i>
+                        <span>Orders</span>
+                    </a>
+                    {{-- <ul class="sidebar-submenu">
+                        <li>
+                            <a href="order-list.html">Order List</a>
+                        </li>
+                        <li>
+                            <a href="order-detail.html">Order Detail</a>
+                        </li>
+                        <li>
+                            <a href="order-tracking.html">Order Tracking</a>
+                        </li>
+                    </ul> --}}
+                </li>
+                {{-- <li class="sidebar-list">
+                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-price-tag-3-line"></i>
+                        <span>Coupons</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{route('coupons.index')}}">Coupon List</a>
+                        </li>
 
-                                        <li>
-                                            <a href="{{route('coupons.create')}}">Create Coupon</a>
-                                        </li>
-                                    </ul>
-                                </li>
+                        <li>
+                            <a href="{{route('coupons.create')}}">Create Coupon</a>
+                        </li>
+                    </ul>
+                </li> --}}
 
-                                <li class="sidebar-list">
-                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
-                                        <i class="ri-list-check-2"></i>
-                                        <span>Treand</span>
-                                    </a>
-                                    <ul class="sidebar-submenu">
-                                        <li>
-                                            <a href="{{ route('trending.product') }}">Add Traend</a>
-                                        </li>
+                <li class="sidebar-list">
+                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-list-check-2"></i>
+                        <span>Treand</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{ route('trending.product') }}">Add Traend</a>
+                        </li>
 
-                                        <li>
-                                            <a href="{{ route('categories.create') }}">Add New Category</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="product-review.html">
-                                        <i class="ri-star-line"></i>
-                                        <span>Product Review</span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-list">
-                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
-                                        <i class="ri-settings-line"></i>
-                                        <span>Settings</span>
-                                    </a>
-                                    <ul class="sidebar-submenu">
-                                        <li>
-                                            <a href="{{ route('profile.edit') }}">Profile Setting</a>
-                                        </li>
-                                    </ul>
-                                </li>
+                        <li>
+                            <a href="{{ route('categories.create') }}">Add New Category</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-list">
+                    <a class="sidebar-link sidebar-title link-nav" href="product-review.html">
+                        <i class="ri-star-line"></i>
+                        <span>Product Review</span>
+                    </a>
+                </li>
+                <li class="sidebar-list">
+                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-settings-line"></i>
+                        <span>Settings</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{ route('profile.edit') }}">Profile Setting</a>
+                        </li>
+                    </ul>
+                </li>
 
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="reports.html">
-                                        <i class="ri-file-chart-line"></i>
-                                        <span>Reports</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                <li class="sidebar-list">
+                    <a class="sidebar-link sidebar-title link-nav" href="reports.html">
+                        <i class="ri-file-chart-line"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
 
-                        <div class="right-arrow" id="right-arrow">
-                            <i data-feather="arrow-right"></i>
-                        </div>
-                    </nav>
+        <div class="right-arrow" id="right-arrow">
+            <i data-feather="arrow-right"></i>
+        </div>
+    </nav>
+    @elseif(auth()->user()->role == 'vendor')
+    <nav class="sidebar-main">
+        <div class="left-arrow" id="left-arrow">
+            <i data-feather="arrow-left"></i>
+        </div>
+
+        <div id="sidebar-menu">
+            <ul class="sidebar-links" id="simple-bar">
+                <li class="back-btn"></li>
+
+                <li class="sidebar-list">
+                    <a class="sidebar-link sidebar-title link-nav" href="index.html">
+                        <i class="ri-home-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-list">
+                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-store-3-line"></i>
+                        <span>Product</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{ route('all.product') }}">Prodcts</a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('product.show') }}">Add New Products</a>
+                        </li>
+                    </ul>
+                </li>
+
+
+
+                <li class="sidebar-list">
+                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-list-settings-line"></i>
+                        <span>Attributes</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="attributes.html">Attributes</a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('add.attribute')}}">Add Attributes</a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li class="sidebar-list">
+                    <a class="sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-archive-line"></i>
+                        <span>Orders</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="order-list.html">Order List</a>
+                        </li>
+                        <li>
+                            <a href="order-detail.html">Order Detail</a>
+                        </li>
+                        <li>
+                            <a href="order-tracking.html">Order Tracking</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-list">
+                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-price-tag-3-line"></i>
+                        <span>Coupons</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{route('coupons.index')}}">Coupon List</a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('coupons.create')}}">Create Coupon</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-list">
+                    <a class="sidebar-link sidebar-title link-nav" href="product-review.html">
+                        <i class="ri-star-line"></i>
+                        <span>Product Review</span>
+                    </a>
+                </li>
+                <li class="sidebar-list">
+                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                        <i class="ri-settings-line"></i>
+                        <span>Settings</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{ route('profile.edit') }}">Profile Setting</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-list">
+                    <a class="sidebar-link sidebar-title link-nav" href="reports.html">
+                        <i class="ri-file-chart-line"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="right-arrow" id="right-arrow">
+            <i data-feather="arrow-right"></i>
+        </div>
+    </nav>
+    @endif
+
+
+
+@endif
                 </div>
             </div>
             @yield('content')

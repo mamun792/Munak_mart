@@ -4,17 +4,58 @@
 @section('content')
     <div class="page-body">
         <div class="container-fluid">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Success!</strong> {{ session('success') }}
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong> {{ session('error') }}
+            @endif
             <div class="row">
+
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
-                            <div class="title-header option-title">
+                            {{-- success message --}}
+
+                            <class="title-header option-title">
+
+                                {{-- show treand  --}}
+                                <div class="container mt-5">
+                                    <h2>Treand Product</h2>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">SL</th>
+                                                <th scope="col">Photo</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach ($trending as $key => $item)
+                                                <tr>
+                                                    <th scope="row">{{ $key + 1 }}</th>
+                                                    <td><img src="{{ asset('image/trends/' . $item->image) }}"
+                                                            alt="" width="100px"></td>
+                                                    <td>{{ $item->desc }}</td>
+                                                    <td>
+                                                        <a href="#"
+                                                        class="btn btn-danger">Delete</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+
+                                        </tbody>
+                                    </table>
 
 
 
-                                <p>hiungin</p>
+                                </div>
 
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -24,11 +65,13 @@
                         <div class="card-body">
                             <div class="title-header option-title">
 
-                                {{-- treand upload from --}}
+
 
                                 <div class="container mt-5">
-                                    <h2>Custom Photo Upload Form</h2>
-                                    <form id="photoUploadForm" method="POST" action="#">
+                                    <h2>Treand Product</h2>
+                                    <form method="POST" action="{{ route('trending.product.add') }}"
+                                        enctype="multipart/form-data">
+                                        @csrf
                                         <label for="photoInput" class="form-label">Descprition</label>
                                         <div class="mb-3">
 
@@ -36,13 +79,13 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="photoInput" class="form-label">Select Photo</label>
-                                            <input type="file" class="form-control" id="photoInput" accept="image/*">
+                                            <input type="file" class="form-control" name="t_photo">
                                         </div>
                                         <div class="mb-3">
-                                            <button type="button" class="btn btn-primary" id="uploadButton">Upload</button>
+                                            <button type="submit" class="btn btn-primary">Upload</button>
                                         </div>
                                     </form>
-                                    <div id="uploadedPhoto" class="mt-3"></div>
+
                                 </div>
 
 
@@ -58,31 +101,5 @@
 
 
 @section('footer_scprit')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const photoInput = document.getElementById('photoInput');
-        const uploadButton = document.getElementById('uploadButton');
-        const uploadedPhoto = document.getElementById('uploadedPhoto');
-
-        uploadButton.addEventListener('click', function () {
-            const file = photoInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.classList.add('img-thumbnail');
-
-                    uploadedPhoto.innerHTML = '';
-                    uploadedPhoto.appendChild(img);
-                };
-
-                reader.readAsDataURL(file);
-            } else {
-                uploadedPhoto.innerHTML = '<p>No photo selected.</p>';
-            }
-        });
-    });
-</script>
+    <script></script>
 @endsection

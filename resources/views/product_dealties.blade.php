@@ -190,7 +190,7 @@
 
 
 
-                                @if (auth()->check())
+                                {{-- @if (auth()->check())
                                     <div class="buy-box">
                                         @if ( $whishlist_checks==1)
                                             <i class="text-danger" data-feather="heart"></i>
@@ -202,7 +202,7 @@
                                             </a>
                                         @endif
                                     </div>
-                                @endif
+                                @endif --}}
 
                                 <div class="pickup-box">
                                     <div class="product-title">
@@ -1106,3 +1106,4 @@
     @endsection
 
     <!-- Modal -->
+

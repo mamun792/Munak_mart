@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\Authenticate;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
@@ -25,12 +26,35 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        $role = auth()->user()->role;
+        // return redirect()->intended(RouteServiceProvider::HOME);
+        if ($role) {
+            switch ($role) {
+                case 'admin':
+                    return redirect()->intended('/dashboard');
+                    break;
+
+                case 'vendor':
+                    return redirect()->intended('/dashboard');
+                    break;
+
+                default:
+                    return redirect()->intended('/customer/dashboard');
+                    break;
+            }
+        }
+
+        //return redirect()->route('login')->with('error', 'Invalid credentials.');
     }
+
+
+
+
 
     /**
      * Destroy an authenticated session.

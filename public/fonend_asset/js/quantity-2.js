@@ -22,7 +22,7 @@ $(".qty-left-minus").on("click", function () {
         $(_removeCls).removeClass("open");
     }
     var currentVal = parseInt($qty.val());
-    if (!isNaN(currentVal) && currentVal > 0) {
+    if (!isNaN(currentVal) && currentVal > 1) {
         $qty.val(currentVal - 1);
     }
 });

@@ -15,6 +15,7 @@ use App\Models\CustomerAddress;
 use App\Models\Invoice;
 use App\Models\invoice_Deatiles;
 use App\Models\Wishlist;
+use App\Models\Treand;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -31,24 +32,25 @@ class FontendController extends Controller
 
         $prpoducts = Product::latest()->get();
         $categories = Category::latest()->get();
+        $tranding =  Treand::first();
 
-        return view('index', compact('prpoducts', 'categories'));
+        return view('index', compact('prpoducts', 'categories', 'tranding'));
     }
+    // public function product_detalis($id)
+    // {
+    //     $poducts  = Product::find($id);
+    //     //  return view('product_details', compact('products'));
+    //     return view('product_dealties', compact('poducts'));
+    // }
 
 
     public function product_detalis($id)
     {
-
-
-
-
         try {
 
 
-
-
-
             $featured_photos  = Featured_photo::where('product_id', $id)->get();
+
             $poducts = Product::find($id);
             $category_id = $poducts->category_id;
             $related_products = Product::where('category_id', $category_id)->where('id', '!=', $id)->get();
@@ -56,15 +58,19 @@ class FontendController extends Controller
 
             $product_size = Inventory::where('product_id', $id)->with('size')->get();
 
-            $whishlist_check = Wishlist::where('user_id', auth()->user()->id)->where('product_id', $id)->exists();
-            if ($whishlist_check) {
 
-                $whishlist_checks = 1;
-            } else {
-                $whishlist_checks = 0;
-            }
+            // $whishlist_checks = 0;
 
-            return view('product_dealties', compact('poducts', 'featured_photos', 'vendors', 'related_products', 'product_size', 'whishlist_checks'));
+            // $whishlist_check = Wishlist::where('user_id', auth()->user()->id)->where('product_id', $id)->exists();
+
+
+            // if ($whishlist_check) {
+
+            //     $whishlist_checks = 1;
+            // }
+
+
+            return view('product_dealties', compact('poducts', 'featured_photos', 'vendors', 'related_products', 'product_size'));
         } catch (\Throwable $th) {
             return view('product_dealties')->with('error', 'Product not found!');
         }
@@ -484,9 +490,9 @@ class FontendController extends Controller
     {
 
         try {
-    $invoice =Invoice::with('invoiceDownload')->find($id);
+            $invoice = Invoice::with('invoiceDownload')->find($id);
             $adderss = CustomerAddress::where('customer_id', $invoice->user_id)->first();
-          // $invoice_details = invoice_Deatiles::where('invoice_id', $id)->get();
+            // $invoice_details = invoice_Deatiles::where('invoice_id', $id)->get();
 
             $pdf = \PDF::loadView('invoice', compact('invoice',  'adderss'));
             return $pdf->download('invoice.pdf');
@@ -494,6 +500,4 @@ class FontendController extends Controller
             $th->getMessage();
         }
     }
-
-
 }

@@ -20,9 +20,15 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        if (auth()->user()->role == 'customer') {
+            return view('customer.profile', [
+                'user' => $request->user(),
+            ]);
+        } else {
+            return view('profile.edit', [
+                'user' => $request->user(),
+            ]);
+        }
     }
 
     /**
@@ -102,15 +108,11 @@ class ProfileController extends Controller
 
 
         if (Hash::check($request->current_password, $user->password)) {
-          user::find($user->id)->update(['password' => Hash::make($request->password)]);
+            user::find($user->id)->update(['password' => Hash::make($request->password)]);
             return back()->with('success', 'Password updated successfully!');
-           //
-        }else{
+            //
+        } else {
             return back()->withErrors(['current_password' => 'Current password is incorrect.']);
         }
-
-
-
-
     }
 }
