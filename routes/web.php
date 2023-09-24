@@ -102,6 +102,8 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/customer/dashboard', [CustomerProfileController::class, 'index'])->name('customer');
     Route::get('/address/edit/{id}', [CustomerProfileController::class, 'address_edit'])->name('address.edit');
     Route::post('/address/update/{id}', [CustomerProfileController::class, 'address_update'])->name('address.update');
+    Route::get('/customer/review/{id}', [CustomerProfileController::class, 'customer_review'])->name('customer.review');
+    Route::post('/customer/review/add', [CustomerProfileController::class, 'customer_review_add'])->name('customer.review.add');
 });
 Route::get('login/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('google/callback', [GoogleLoginController::class, 'Callback'])->name('google.callback');

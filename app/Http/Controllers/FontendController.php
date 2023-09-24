@@ -17,6 +17,7 @@ use App\Models\invoice_Deatiles;
 use App\Models\Wishlist;
 use App\Models\Treand;
 use Carbon\Carbon;
+use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
@@ -33,6 +34,7 @@ class FontendController extends Controller
         $prpoducts = Product::latest()->get();
         $categories = Category::latest()->get();
         $tranding =  Treand::first();
+
 
         return view('index', compact('prpoducts', 'categories', 'tranding'));
     }
@@ -58,7 +60,7 @@ class FontendController extends Controller
 
             $product_size = Inventory::where('product_id', $id)->with('size')->get();
 
-
+            $review = Review::latest()->get();
             // $whishlist_checks = 0;
 
             // $whishlist_check = Wishlist::where('user_id', auth()->user()->id)->where('product_id', $id)->exists();
@@ -70,7 +72,7 @@ class FontendController extends Controller
             // }
 
 
-            return view('product_dealties', compact('poducts', 'featured_photos', 'vendors', 'related_products', 'product_size'));
+            return view('product_dealties', compact('poducts', 'featured_photos', 'vendors', 'related_products', 'product_size', 'review'));
         } catch (\Throwable $th) {
             return view('product_dealties')->with('error', 'Product not found!');
         }

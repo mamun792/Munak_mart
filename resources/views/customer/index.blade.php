@@ -25,13 +25,12 @@
         </div>
     </section>
     <!-- Breadcrumb Section End -->
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong> {{ session('success') }} </strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-
-@endif
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong> {{ session('success') }} </strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <!-- User Dashboard Section Start -->
     <section class="user-dashboard-section section-b-space">
         <div class="container-fluid-lg">
@@ -141,7 +140,8 @@
                                     </div>
 
                                     <div class="dashboard-user-name">
-                                        <h6 class="text-content">Hello, <b class="text-title">{{auth()->user()->name}}</b></h6>
+                                        <h6 class="text-content">Hello, <b
+                                                class="text-title">{{ auth()->user()->name }}</b></h6>
                                         <p class="text-content">From your My Account Dashboard you have the ability to
                                             view a snapshot of your recent account activity and update your account
                                             information. Select a link below to view or edit information.</p>
@@ -318,7 +318,24 @@
                                                     <td>
                                                         <button type="submit" class="btn btn-primary"
                                                             onclick="loadDetails({{ $invoice_deatile->id }})">Detalies</button>
-                                                        {{-- <a href="{{ route('invoice.details',$invoice_deatile->id)}}">Deatiles</a> --}}
+
+                                                    </td>
+                                                    <td>
+                                                        {{-- @php
+                                                            $review = App\Models\Review::where('product_id', $invoice_deatile->id)->first();
+                                                        @endphp
+                                                        @if ($review)
+                                                            <p>Not review</p>
+                                                        @else
+                                                            <a class="btn btn-primary"
+                                                                href="{{ route('customer.review', $invoice_deatile->id) }}">
+                                                                Review</a>
+                                                        @endif --}}
+                                                        @php
+                                                            $productId = $invoice_deatile->id;
+                                                        @endphp
+
+                                                        <x-product-review :productId="$productId" />
                                                     </td>
 
                                                 </tr>
@@ -429,7 +446,7 @@
                                         </div>
                                         <div class="profile-name-detail">
                                             <div class="d-sm-flex align-items-center d-block">
-                                                <h3>{{  auth()->user()->name }}</h3>
+                                                <h3>{{ auth()->user()->name }}</h3>
                                                 <div class="product-rating profile-rating">
                                                     <ul class="rating">
                                                         <li>
@@ -468,7 +485,7 @@
                                                 <li>
                                                     <div class="location-box">
                                                         <i data-feather="mail"></i>
-                                                        <h6>{{ auth()->user()->email}}</h6>
+                                                        <h6>{{ auth()->user()->email }}</h6>
                                                     </div>
                                                 </li>
 
@@ -500,7 +517,8 @@
                                                             <tr>
                                                                 <td>Phone Number :</td>
                                                                 <td>
-                                                                    <a href="javascript:void(0)"> {{ $adderss->first()->PhoneNumber}}</a>
+                                                                    <a href="javascript:void(0)">
+                                                                        {{ $adderss->first()->PhoneNumber }}</a>
                                                                 </td>
                                                             </tr>
 
@@ -518,7 +536,7 @@
                                                             <tr>
                                                                 <td>Email :</td>
                                                                 <td>
-                                                                    <a href="javascript:void(0)">{{ auth()->user()->email}}
+                                                                    <a href="javascript:void(0)">{{ auth()->user()->email }}
                                                                         <span data-bs-toggle="modal"
                                                                             data-bs-target="#editProfile">Edit</span></a>
                                                                 </td>
@@ -567,7 +585,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="container">
-                        <form id="editForm" action="{{route('address.update',['id' => '__ADDRESS_ID__'])}}" method="post">
+                        <form id="editForm" action="{{ route('address.update', ['id' => '__ADDRESS_ID__']) }}"
+                            method="post">
                             @csrf
 
 
@@ -579,12 +598,14 @@
 
                             <div class="form-group">
                                 <label for="CustomerName">User Name:</label>
-                                <input type="text" class="form-control" id="CustomerName" name="CustomerName" required>
+                                <input type="text" class="form-control" id="CustomerName" name="CustomerName"
+                                    required>
                             </div>
 
                             <div class="form-group">
                                 <label for="CustomerAddress">Address:</label>
-                                <input type="text" class="form-control" id="CustomerAddress" name="CustomerAddress" required>
+                                <input type="text" class="form-control" id="CustomerAddress" name="CustomerAddress"
+                                    required>
                             </div>
 
                             <div class="form-group">
@@ -677,8 +698,8 @@
 
 
                         var formAction = $('#editForm').attr('action');
-            formAction = formAction.replace('__ADDRESS_ID__', addressId);
-            $('#editForm').attr('action', formAction);
+                        formAction = formAction.replace('__ADDRESS_ID__', addressId);
+                        $('#editForm').attr('action', formAction);
                         $('#editModal').modal('show');
 
                     },
