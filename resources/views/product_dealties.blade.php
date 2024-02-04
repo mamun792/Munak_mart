@@ -830,7 +830,7 @@
                         product_id: product_id,
                     },
                     success: function(data) {
-                        alert(data);
+                        alert(data.message);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert('Error: ' + textStatus + ' - ' + errorThrown);

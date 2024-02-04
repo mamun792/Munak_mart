@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Services\ProductService;
 use App\Models\Attributes;
 use App\Models\Cart;
 use App\Models\Category;
@@ -26,24 +26,25 @@ use PDF;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
+
 class FontendController extends Controller
 {
-    public function index()
+    public function index(ProductService $productService)
+   
     {
+        try{
+            $tranding = $productService->getAllTreands();
+            $prpoducts = $productService->getAllProducts();
+            $categories = $productService->getAllCategories();
 
-        $prpoducts = Product::latest()->get();
-        $categories = Category::latest()->get();
-        $tranding =  Treand::first();
-
-
-        return view('index', compact('prpoducts', 'categories', 'tranding'));
+            return view('index', compact('tranding', 'prpoducts', 'categories'));
+        } catch (\Throwable $th) {
+            return view('index')->with('error', 'Product not found!');
+            
+        }
+       
     }
-    // public function product_detalis($id)
-    // {
-    //     $poducts  = Product::find($id);
-    //     //  return view('product_details', compact('products'));
-    //     return view('product_dealties', compact('poducts'));
-    // }
+   
 
 
     public function product_detalis($id)
@@ -56,24 +57,19 @@ class FontendController extends Controller
             $poducts = Product::find($id);
             $category_id = $poducts->category_id;
             $related_products = Product::where('category_id', $category_id)->where('id', '!=', $id)->get();
+
             $vendors = User::find($poducts->vendor_id);
 
             $product_size = Inventory::where('product_id', $id)->with('size')->get();
 
             $review = Review::latest()->get();
-            // $whishlist_checks = 0;
-
-            // $whishlist_check = Wishlist::where('user_id', auth()->user()->id)->where('product_id', $id)->exists();
-
-
-            // if ($whishlist_check) {
-
-            //     $whishlist_checks = 1;
-            // }
+           
 
 
             return view('product_dealties', compact('poducts', 'featured_photos', 'vendors', 'related_products', 'product_size', 'review'));
         } catch (\Throwable $th) {
+            return view('product_dealties')->with('error', 'Product not found!');
+        }catch (ModelNotFoundException $e) {
             return view('product_dealties')->with('error', 'Product not found!');
         }
     }
@@ -85,15 +81,27 @@ class FontendController extends Controller
 
     public function wishlist($id)
     {
-
-        $user_id = auth()->user()->id;
-        Wishlist::insert([
-            'user_id' => $user_id,
-            'product_id' => $id,
-            'created_at' => Carbon::now(),
-        ]);
-
-        return back();
+        try{
+            $count = Wishlist::where([
+                'user_id' => Auth::id(),
+                'product_id' => $id,
+            ])->exists();
+            if ($count) {
+                return back()->with('error', 'Product already added to wishlist');
+            } else {
+                Wishlist::insert([
+                    'user_id' => Auth::id(),
+                    'product_id' => $id,
+                    'created_at' => Carbon::now(),
+                ]);
+                return back()->with('success', 'Product added to wishlist');
+            }
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Product not found!');
+        }catch (ModelNotFoundException $e) {
+            return back()->with('error', 'Product not found!');
+        }
+        
     }
 
     public function wishlist_show()
@@ -104,8 +112,14 @@ class FontendController extends Controller
 
     public function wishlist_delete($id)
     {
-        Wishlist::find($id)->delete();
-        return back();
+        try{
+            Wishlist::find($id)->delete();
+            return back()->with('success', 'Product removed from wishlist');
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Product not found!');
+        }catch (ModelNotFoundException $e) {
+            return back()->with('error', 'Product not found!');
+        }
     }
 
     public function custom_login(Request $request)
@@ -126,13 +140,14 @@ class FontendController extends Controller
     {
 
         try {
-            $color_list = '';
+           
             $size_id = $request->size;
             $product_id = $request->product_id;
             $inventories = Inventory::where([
                 'size_name' => $size_id,
                 'product_id' => $product_id,
             ])->get();
+            $color_list = '';
 
             foreach ($inventories as $inventory) {
                 $color_list .= "<option value='" . $inventory->color->id . "'>" . $inventory->color->name . " (Stack " . $inventory->quantity . ")" . "</option>";
@@ -145,50 +160,49 @@ class FontendController extends Controller
 
     public function add_to_card(Request $request)
     {
-
-
-        $reat_stock = Inventory::where([
+            
+        try{
+            $requestedQuantity = $request->quantity;
+        $inventory = Inventory::where([
             'product_id' => $request->product_id,
             'size_name' => $request->size_id,
             'color_name' => $request->color_id,
-        ])->first()->quantity;
+        ])->first();
 
-        if ($reat_stock < $request->quantity) {
-            echo "Not Avabile";
+        if (!$inventory || $inventory->quantity < $requestedQuantity) {
+            return response()->json(['error' => 'Not Available'], 400);
+        }
+
+        $cartCondition = [
+            'user_id' => Auth::id(),
+            'product_id' => $request->product_id,
+            'size_id' => $request->size_id,
+            'color_id' => $request->color_id,
+        ];
+
+        $existingCartItem = Cart::where($cartCondition)->first();
+
+        if ($existingCartItem) {
+            $existingCartItem->increment('quantity', $requestedQuantity);
         } else {
-            // $ "very good";
-
-            $count_product =  Cart::where([
+            Cart::create([
                 'user_id' => Auth::id(),
                 'product_id' => $request->product_id,
                 'size_id' => $request->size_id,
                 'color_id' => $request->color_id,
-
-            ])->exists();
-            if ($count_product) {
-
-                Cart::where([
-                    'user_id' => Auth::id(),
-                    'product_id' => $request->product_id,
-                    'size_id' => $request->size_id,
-                    'color_id' => $request->color_id,
-                ])->increment('quantity', $request->quantity);
-            } else {
-                Cart::insert([
-                    'user_id' => Auth::id(),
-                    'product_id' => $request->product_id,
-                    'size_id' => $request->size_id,
-                    'color_id' => $request->color_id,
-                    'quantity' => $request->quantity,
-                    'created_at' => Carbon::now(),
-
-                ]);
-            }
-
-
-
-            echo "add to card";
+                'quantity' => $requestedQuantity,
+                'created_at' => Carbon::now(),
+            ]);
         }
+
+        return response()->json(['message' => 'Added to cart successfully']);
+    } catch (\Exception $exception) {
+        \Log::error('Error adding to cart: ' . $exception->getMessage());
+
+        return response()->json(['error' => 'An error occurred while adding to the cart'], 500);
+    }
+
+        
     }
     public function view_card(Request $request)
     {
@@ -241,9 +255,12 @@ class FontendController extends Controller
 
     public function cart_delete($id)
     {
-        Cart::find($id)->delete();
-
-        return back();
+        try{
+            Cart::find($id)->delete();
+            return back()->with('success', 'Product removed from cart');
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Product not found!');
+        }
     }
     public function card_update(Request $request, $id)
     {
@@ -262,15 +279,21 @@ class FontendController extends Controller
     public function shop($id)
     {
 
+       try{
         if ($id == 'all') {
-            $poducts = Product::latest()->with('category')->get();
+            
+            $poducts = Product::latest()->with('category')->paginate(12);
         } else {
             $poducts = Product::where('category_id', $id)->with('category')->get();
         }
-
-
-
         return view('shop', compact('poducts'));
+       } catch (\Throwable $th) {
+           return view('shop')->with('error', 'Product not found!');
+       }
+
+
+
+       
     }
 
 
@@ -304,6 +327,7 @@ class FontendController extends Controller
     public function checkout()
     {
 
+       try{
         $check_link = strpos(url()->previous(), "card");
         if ($check_link || strpos(url()->previous(), "Checkout")) {
 
@@ -314,6 +338,9 @@ class FontendController extends Controller
         } else {
             abort(404);
         }
+       }catch (\Throwable $th) {
+        return view('checkout')->with('error', 'Product not found!');
+       }
     }
 
     public function costomer_adderss_add(Request $request)
